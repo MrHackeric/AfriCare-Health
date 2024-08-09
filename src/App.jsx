@@ -13,6 +13,11 @@ import ChatbotPage from './projectmodules/Chatbot/ChatbotPage';
 import SignUpPage from './projectmodules/SignUp/SignUpPage';
 import SignInPage from './projectmodules/SignIn/SignInPage';
 import ForgotPasswordPage from './projectmodules/ForgotPass/ForgotPassword';
+import FeedBackForm from './projectmodules/Settings/FeedBackForm';
+import BillingPlans from './projectmodules/Settings/BillingPlans';
+import BillingInvoices from './projectmodules/Settings/BillingInvoices';
+import AccountDetailsPage from './projectmodules/Settings/AccountDetailsPage';
+import NotificationsPage from './projectmodules/Settings/NotificationsPage';
 import NotFoundPage from './projectmodules/NotFound/NotFoundPage'; // Import a NotFound page
 
 function App() {
@@ -48,6 +53,31 @@ function App() {
         <Route path="/Chatbot" element={
           <ProtectedRoute>
             <ChatbotPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/BillingInvoices" element={
+          <ProtectedRoute>
+            <BillingInvoices />
+          </ProtectedRoute>
+        } />
+        <Route path="/Account" element={
+          <ProtectedRoute>
+            <AccountDetailsPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/Notifications" element={
+          <ProtectedRoute>
+            <NotificationsPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/BillingPlans" element={
+          <ProtectedRoute>
+            <BillingPlans />
+          </ProtectedRoute>
+        } />
+        <Route path="/Feedback" element={
+          <ProtectedRoute>
+            <FeedBackForm />
           </ProtectedRoute>
         } />
         <Route path="*" element={<NotFoundPage />} /> {/* Fallback route */}
