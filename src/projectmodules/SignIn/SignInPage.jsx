@@ -118,7 +118,7 @@ const SignInPage = () => {
               <div className="mt-6 text-center">
                 <span className="text-sm text-gray-700 dark:text-gray-200">
                   Don't have an account?{' '}
-                  <a href="/" className="text-blue-600 hover:underline">
+                  <a href="/SignUp" className="text-blue-600 hover:underline">
                     Sign Up
                   </a>
                 </span>

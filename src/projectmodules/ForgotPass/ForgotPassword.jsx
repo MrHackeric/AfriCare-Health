@@ -104,7 +104,7 @@ function ForgotPasswordPage() {
         </Formik>
         <div className="mt-4 text-center">
           <a
-            href="/SignIn"
+            href="/"
             className="text-sm text-blue-500 hover:underline"
           >
             Remembered your password? Sign In

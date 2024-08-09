@@ -288,7 +288,7 @@ const SignUpPage = () => {
                   Already have an account?{' '}
                   <a
                     href="#"
-                    onClick={() => navigate('/SignIn')}
+                    onClick={() => navigate('/')}
                     className="text-blue-500 hover:underline"
                   >
                     Sign in here
