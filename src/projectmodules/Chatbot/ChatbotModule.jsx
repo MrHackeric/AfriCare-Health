@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Lottie from 'react-lottie';
 import animationData from '../../images/Animation.json'; // replace with your actual Lottie animation file
-import { FaShare, FaCopy, FaDownload, FaStar, FaRegStar, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaShare, FaCopy, FaDownload, FaStar, FaRegStar, FaChevronDown, FaChevronUp, FaAngleDoubleUp, FaAngleDoubleDown } from 'react-icons/fa';
 
 function Chatbot() {
   const [messages, setMessages] = useState([]);
@@ -14,10 +14,10 @@ function Chatbot() {
   const [email, setEmail] = useState(() => localStorage.getItem('userEmail') || '');
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(() => !!localStorage.getItem('isReturningUser'));
   const [caption, setCaption] = useState('');
-  const [sampleQuestionsVisible, setSampleQuestionsVisible] = useState(false);
+  const [showAllStarred, setShowAllStarred] = useState(false); // New state for collapse/expand all
+
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
-  const sampleQuestionsRef = useRef(null);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -29,17 +29,6 @@ function Chatbot() {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sampleQuestionsRef.current && !sampleQuestionsRef.current.contains(event.target)) {
-        setSampleQuestionsVisible(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const sendMessage = async (text) => {
@@ -120,10 +109,6 @@ function Chatbot() {
     }
   };
 
-  const handleSampleQuestionClick = (question) => {
-    setCaption(question);
-  };
-
   const formatText = (text) => {
     return text.replace(/\*(.*?)\*/g, '<b>$1</b>');
   };
@@ -135,6 +120,9 @@ function Chatbot() {
       setCaption('');
     }
   };
+
+  const toggleShowStarred = () => setShowStarred((prev) => !prev);
+  const toggleShowAllStarred = () => setShowAllStarred((prev) => !prev);
 
   if (isNewUser && !isOnboardingComplete) {
     return (
@@ -210,82 +198,53 @@ function Chatbot() {
                     <FaDownload className="text-gray-500 dark:text-gray-300" />
                   </button>
                   <button onClick={() => handleStarMessage(msg)}>
-                    {starredMessages.some((starredMsg) => starredMsg.timestamp === msg.timestamp) ? (
-                      <FaStar className="text-yellow-500" />
-                    ) : (
-                      <FaRegStar className="text-gray-500 dark:text-gray-300" />
-                    )}
+                    {starredMessages.some((m) => m.timestamp === msg.timestamp) ? <FaStar className="text-yellow-500" /> : <FaRegStar className="text-gray-500" />}
                   </button>
                 </div>
               )}
             </div>
           ))}
+          {loading && (
+            <div className="flex justify-center items-center my-4">
+              <Lottie
+                options={{
+                  loop: true,
+                  autoplay: true,
+                  animationData: animationData,
+                  rendererSettings: {
+                    preserveAspectRatio: 'xMidYMid slice',
+                  },
+                }}
+                height={50}
+                width={50}
+              />
+            </div>
+          )}
           {error && (
-            <div className="text-center text-red-500">
+            <div className="text-red-500 dark:text-red-400 mt-2">
               {error}
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
-        <div className="border-t border-gray-100 dark:border-gray-700/60 p-4 bg-gray-50 dark:bg-gray-800 flex flex-col space-y-2">
+        <div className="border-t border-gray-100 dark:border-gray-700/60 p-4 bg-gray-50 dark:bg-gray-700 dark:bg-opacity-50 flex items-center space-x-2">
           <textarea
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             onKeyDown={handleKeyDown}
+            className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
             placeholder="Type your message here..."
-            className="p-2 border rounded-sm h-24 resize-none dark:bg-gray-800 dark:border-gray-700"
+            rows={2}
           />
-          <div className="flex justify-between items-center">
-            <button
-              onClick={() => setSampleQuestionsVisible(!sampleQuestionsVisible)}
-              className="text-blue-500 dark:text-blue-400"
-            >
-              {sampleQuestionsVisible ? 'Hide Sample Questions' : 'Show Sample Questions'}
-            </button>
-            <button
-              onClick={() => sendMessage(caption)}
-              className="bg-blue-500 text-white p-2 rounded-sm"
-            >
-              Send
-            </button>
-          </div>
-          {sampleQuestionsVisible && (
-            <div ref={sampleQuestionsRef} className="bg-gray-200 dark:bg-gray-700 p-2 rounded-sm mt-2 absolute z-10">
-              <h4 className="font-semibold mb-2">Sample Questions:</h4>
-              <ul>
-                <li><button onClick={() => handleSampleQuestionClick('What are the early signs of pregnancy?')}>What are the early signs of pregnancy?</button></li>
-                <li><button onClick={() => handleSampleQuestionClick('How can I prepare for a healthy pregnancy?')}>How can I prepare for a healthy pregnancy?</button></li>
-                <li><button onClick={() => handleSampleQuestionClick('What are common prenatal vitamins and their benefits?')}>What are common prenatal vitamins and their benefits?</button></li>
-                <li><button onClick={() => handleSampleQuestionClick('What should I include in my birth plan?')}>What should I include in my birth plan?</button></li>
-                <li><button onClick={() => handleSampleQuestionClick('How can I manage stress and anxiety during pregnancy?')}>How can I manage stress and anxiety during pregnancy?</button></li>
-              </ul>
-            </div>
-          )}
-          {showStarred && (
-            <div className="p-2 border rounded-md mb-2 bg-gray-100 dark:bg-gray-900">
-              <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Starred Messages</h3>
-              {starredMessages.map((msg, index) => (
-                <div key={index} className="mb-2">
-                  <span className="block p-2 rounded-md max-w-md bg-gray-200 dark:bg-gray-700">{msg.text}</span>
-                </div>
-              ))}
-              <button
-                onClick={() => setShowStarred(false)}
-                className="text-blue-500 dark:text-blue-400 mt-2"
-              >
-                <FaChevronUp />
-              </button>
-            </div>
-          )}
-          {!showStarred && (
-            <button
-              onClick={() => setShowStarred(true)}
-              className="text-blue-500 dark:text-blue-400"
-            >
-              <FaChevronDown /> Show Starred Messages
-            </button>
-          )}
+          <button
+            className="bg-blue-500 text-white p-2 rounded-sm"
+            onClick={() => sendMessage(caption)}
+          >
+            Send
+          </button>
         </div>
+      </div>
+      <div>
       </div>
     </div>
   );
