@@ -20,7 +20,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "firebase": "^10.12.4",
+    "firebase": "^10.12.5",
     "firebase-admin": "^12.3.0",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
