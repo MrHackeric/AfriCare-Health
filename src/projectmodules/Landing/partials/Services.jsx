@@ -16,20 +16,20 @@ const data = [
   },
   {
     url: hospital,
-    title: "Emergencies",
+    title: "Maps & Emergencies",
     text: "Access vital emergency contacts and find the nearest healthcare facilities on our interactive map. We're here to ensure you get the help you need, fast.",
   },
 ];
 
 function Services() {
   return (
-    <section className="flex justify-center px-4 pb-8 pt-8">
+    <section className="flex justify-center px-4 pb-8 pt-8 bg-[#f7f0f7]">
       <div className="max-w-[1200px] flex flex-wrap gap-6 justify-center">
-        <h2 className="w-full text-4xl font-bold text-center mb-8 text-gray-100 relative">
+        <h2 className="w-full text-4xl font-bold text-center mb-8 text-[#874c78] relative">
           Our Services
-          <span className="block w-20 h-[3px] bg-gray-200 mx-auto mt-2"></span>
+          <span className="block w-20 h-[3px] bg-[#f2b1de] mx-auto mt-2"></span>
         </h2>
-        <h3 className="text-2xl font-semibold text-center text-slate-200 mb-4">
+        <h3 className="text-2xl font-semibold text-center text-[#a06e91] mb-4">
           Explore Our Comprehensive Services Designed to Support Your Maternal Health Journey
         </h3>
         {data.map((service, index) => (

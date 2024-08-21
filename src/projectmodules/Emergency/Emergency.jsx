@@ -37,34 +37,34 @@ function Emergency() {
   };
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
-      <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Emergency Contacts</h2>
+    <div className="col-span-full xl:col-span-6 bg-[#fff] rounded-xl p-6">
+      <h2 className="text-sm font-semibold text-[#a06e91] mb-4">Emergency Contacts</h2>
 
       <div className="mb-4">
-        <h3 className="font-medium text-gray-800 dark:text-gray-100">Add New Contact</h3>
+        <h3 className="text-sm font-medium text-[#a06e91]">Add New Contact</h3>
         <input
           type="text"
           placeholder="Name"
-          className="p-2 border rounded-sm w-full mt-2 dark:bg-gray-800 dark:border-gray-700"
+          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
           value={newContact.name}
           onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
         />
         <input
           type="tel"
           placeholder="Phone Number"
-          className="p-2 border rounded-sm w-full mt-2 dark:bg-gray-800 dark:border-gray-700"
+          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
           value={newContact.phone}
           onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
         />
         <input
           type="email"
           placeholder="Email Address"
-          className="p-2 border rounded-sm w-full mt-2 dark:bg-gray-800 dark:border-gray-700"
+          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink type-pink"
           value={newContact.email}
           onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
         />
         <select
-          className="p-2 border rounded-sm w-full mt-2 dark:bg-gray-800 dark:border-gray-700"
+          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
           value={newContact.relationship}
           onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
         >
@@ -77,11 +77,11 @@ function Emergency() {
         </select>
         <textarea
           placeholder="Notes"
-          className="p-2 border rounded-sm w-full mt-2 dark:bg-gray-800 dark:border-gray-700"
+          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
           value={newContact.notes}
           onChange={(e) => setNewContact({ ...newContact, notes: e.target.value })}
         />
-        <button className="bg-blue-500 text-white p-2 rounded-sm mt-2" onClick={addContact}>
+        <button className="text-sm bg-[#a06e91] text-[white] p-2 rounded border-2 hover:bg-[white] hover:border-[#a06e91] hover:text-[#a06e91] transition duration-300" onClick={addContact}>
           Add Contact
         </button>
       </div>

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Auth/firebase-config'; // Ensure your Firebase config is correct
+import Header from '../Landing/partials/Header';
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -35,10 +36,10 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-md w-full">
+    <div className="flex items-center justify-center min-h-screen dark:bg-[#874c78]">
+      <div className="border-2 border-[#f2b1d0] bg-white dark:bg-[#874c78] shadow-lg rounded-lg p-8 max-w-md w-full">
         <header className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center">
+          <h2 className="text-2xl font-semibold dark:text-[white] text-center">
             Sign In to AfriCare
           </h2>
         </header>
@@ -54,7 +55,7 @@ const SignInPage = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                    className="block text-sm font-medium dark:text-[white]"
                   >
                     Email
                   </label>
@@ -63,12 +64,12 @@ const SignInPage = () => {
                     name="email"
                     id="email"
                     placeholder="Enter your email"
-                    className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
+                    className="w-full p-3 rounded border-2 dark:border-[#a06e91] dark:bg-[white] dark:text-[#874c78] placeholder-pink"
                   />
                   <ErrorMessage
                     name="email"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="text-[#a06e91] text-sm mt-1"
                   />
                 </div>
                 
@@ -76,7 +77,7 @@ const SignInPage = () => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                    className="block text-sm font-medium text-gray-700 dark:text-[white]"
                   >
                     Password
                   </label>
@@ -86,7 +87,7 @@ const SignInPage = () => {
                       name="password"
                       id="password"
                       placeholder="Enter your password"
-                      className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
+                      className="w-full p-3 rounded border-2 dark:border-[#a06e91] dark:bg-[white] dark:text-[#874c78] placeholder-pink"
                     />
                     <button
                       type="button"
@@ -107,7 +108,7 @@ const SignInPage = () => {
                   <ErrorMessage
                     name="password"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="text-[#a06e91] text-sm mt-1"
                   />
                 </div>
               </div>
@@ -146,7 +147,7 @@ const SignInPage = () => {
           )}
         </Formik>
       </div>
-    </div>
+  </div>
   );
 };
 

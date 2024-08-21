@@ -63,15 +63,15 @@ function EditEmergencyContact({ contactId, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Edit Contact</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-[#a06e91] bg-opacity-30 z-50">
+      <div className="bg-[#fff] p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-sm font-semibold text-[#a06e91] mb-4">Edit Contact</h2>
 
         <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-300 mb-1">Name</label>
+          <label className="block text-sm text-[#a06e91] mb-1">Name</label>
           <div
             contentEditable
-            className="p-2 border rounded-sm w-full dark:bg-gray-800 dark:border-gray-700"
+            className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
             suppressContentEditableWarning
             onBlur={(e) => setContact({ ...contact, name: e.target.textContent })}
           >
@@ -80,10 +80,10 @@ function EditEmergencyContact({ contactId, onClose }) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+          <label className="text-sm block text-[#a06e91] mb-1">Phone Number</label>
           <div
             contentEditable
-            className="p-2 border rounded-sm w-full dark:bg-gray-800 dark:border-gray-700"
+            className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
             suppressContentEditableWarning
             onBlur={(e) => setContact({ ...contact, phone: e.target.textContent })}
           >
@@ -92,10 +92,10 @@ function EditEmergencyContact({ contactId, onClose }) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+          <label className="text-sm block text-[#a06e91] mb-1">Email Address</label>
           <div
             contentEditable
-            className="p-2 border rounded-sm w-full dark:bg-gray-800 dark:border-gray-700"
+            className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
             suppressContentEditableWarning
             onBlur={(e) => setContact({ ...contact, email: e.target.textContent })}
           >
@@ -104,9 +104,9 @@ function EditEmergencyContact({ contactId, onClose }) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-300 mb-1">Relationship</label>
+          <label className="text-sm block text-[#a06e91] mb-1">Relationship</label>
           <div
-            className="p-2 border rounded-sm w-full dark:bg-gray-800 dark:border-gray-700"
+            className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
             contentEditable
             suppressContentEditableWarning
             onBlur={(e) => setContact({ ...contact, relationship: e.target.textContent })}
@@ -117,7 +117,7 @@ function EditEmergencyContact({ contactId, onClose }) {
             {relationships.map((rel) => (
               <button
                 key={rel}
-                className="bg-gray-300 p-2 rounded-sm mr-2"
+                className="text-sm bg-[#a06e91] text-[white] p-2 rounded border-2 hover:bg-[white] hover:border-[#a06e91] hover:text-[#a06e91] transition duration-300"
                 onClick={() => setContact({ ...contact, relationship: rel })}
               >
                 {rel}
@@ -127,10 +127,10 @@ function EditEmergencyContact({ contactId, onClose }) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+          <label className="text-sm block text-[#a06e91] mb-1">Notes</label>
           <div
             contentEditable
-            className="p-2 border rounded-sm w-full dark:bg-gray-800 dark:border-gray-700"
+            className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
             suppressContentEditableWarning
             onBlur={(e) => setContact({ ...contact, notes: e.target.textContent })}
           >
@@ -140,19 +140,19 @@ function EditEmergencyContact({ contactId, onClose }) {
 
         <div className="mt-4 flex justify-end">
           <button
-            className="bg-blue-500 text-white p-2 rounded-sm mr-2"
+            className="bg-[#a06e91] text-[white] p-2 mr-5 rounded border-2 hover:bg-[white] hover:border-[#a06e91] hover:text-[#a06e91] transition duration-300"
             onClick={saveChanges}
           >
             Save
           </button>
           <button
-            className="bg-red-500 text-white p-2 rounded-sm mr-2"
+            className="bg-[red] text-[white] p-2 mr-5 rounded border-2 hover:bg-[white] hover:border-[red] hover:text-[red] transition duration-300"
             onClick={deleteContact}
           >
             Delete
           </button>
           <button
-            className="bg-gray-500 text-white p-2 rounded-sm"
+            className="bg-[#f2b1d0] text-[#874c78] p-2 mr-5 rounded border-2 hover:bg-[white] hover:border-[#f2b1d0] hover:text-[#f2b1d0] transition duration-300"
             onClick={onClose}
           >
             Cancel

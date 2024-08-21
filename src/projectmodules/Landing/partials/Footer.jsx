@@ -2,9 +2,9 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-6">
+    <footer className="bg-[#874c78] text-white py-4">
       <div className="container mx-auto text-center">
-        <p className="mb-4">&copy; 2024 Africare. All rights reserved.</p>
+        <p className="mb-2 text-[white]">&copy; 2024 Africare. All rights reserved.</p>
 
         {/* Social Links */}
         <div className="flex justify-center space-x-6 mb-4">
@@ -13,7 +13,7 @@ function Footer() {
             aria-label="Facebook"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xl hover:text-blue-500"
+            className="text-xl text-[white] hover:text-[#f2b1d0]"
           >
             <FaFacebook />
           </a>
@@ -22,7 +22,7 @@ function Footer() {
             aria-label="Twitter"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xl hover:text-blue-400"
+            className="text-xl text-[white] hover:text-[#f2b1d0]"
           >
             <FaTwitter />
           </a>
@@ -31,7 +31,7 @@ function Footer() {
             aria-label="Instagram"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xl hover:text-pink-500"
+            className="text-xl text-[white] hover:text-[#f2b1d0]"
           >
             <FaInstagram />
           </a>
@@ -40,7 +40,7 @@ function Footer() {
             aria-label="LinkedIn"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xl hover:text-blue-700"
+            className="text-xl text-[white] hover:text-[#f2b1d0]"
           >
             <FaLinkedin />
           </a>

@@ -10,7 +10,7 @@ const aiSocket = io('http://localhost:3030'); // AI service socket connection
 function Community() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [typingUser, setTypingUser] = useState('');
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [currentUser, setCurrentUser] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
@@ -51,21 +51,25 @@ function Community() {
       });
     });
 
-    socket.on('typing', () => {
-      setIsTyping(true);
+    socket.on('userTyping', (user) => {
+      if (user !== currentUser?.displayName) {
+        setTypingUser(user);
+      }
     });
 
-    socket.on('stopTyping', () => {
-      setIsTyping(false);
+    socket.on('userStopTyping', (user) => {
+      if (user === typingUser) {
+        setTypingUser('');
+      }
     });
 
     return () => {
       socket.off('message');
       socket.off('updateLikes');
-      socket.off('typing');
-      socket.off('stopTyping');
+      socket.off('userTyping');
+      socket.off('userStopTyping');
     };
-  }, []);
+  }, [currentUser, typingUser]);
 
   useEffect(() => {
     aiSocket.on('aiResponse', (response) => {
@@ -109,9 +113,9 @@ function Community() {
   const handleTyping = (e) => {
     setInput(e.target.value);
     if (e.target.value.trim()) {
-      socket.emit('typing');
+      socket.emit('typing', currentUser?.displayName || currentUser?.email || 'Anonymous');
     } else {
-      socket.emit('stopTyping');
+      socket.emit('stopTyping', currentUser?.displayName || currentUser?.email || 'Anonymous');
     }
   };
 
@@ -244,9 +248,12 @@ function Community() {
   };
   
   return (
-    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl h-full flex flex-col text-xs">
+    <div className="col-span-full xl:col-span-12 bg-[white] rounded-xl h-full flex flex-col text-xs">
       <div className="p-3 flex flex-col flex-1 relative">
-        <div className="bg-gray-50 dark:bg-gray-700 dark:bg-opacity-50 p-4 rounded-sm overflow-y-auto flex-1">
+        <div className="bg-[#fff] p-4 rounded-sm overflow-y-auto flex-1">
+          <header className="px-3 py-2 border-b border-[#a06e91]">
+            <h2 className="text-sm font-semibold text-[#a06e91]">Community</h2>
+          </header>
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -254,13 +261,20 @@ function Community() {
             >
               <div className="relative max-w-md">
                 <div
-                  className={`inline-block p-1 rounded-md max-w-md ${
-                    msg.sender === currentUser?.uid ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'
+                  className={`flex flex-col justify-between p-2 rounded-md max-w-md text-[#a06e91] ${
+                    msg.sender === currentUser?.uid ? 'bg-[#874c78] text-[#874c78]' : 'bg-[#a06e91]'//User-Right-Left
                   }`}
                 >
+
+              
+                <div className="self-end text-[8px] text-[#a06e91] mt-2">
+                  {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
+                </div>
+
+
                   {collapsedMessages.has(index) && msg.sender === 'ai' ? (
                     <div>
-                      <button onClick={() => toggleCollapse(index)} className="text-xs text-blue-500">
+                      <button onClick={() => toggleCollapse(index)} className="text-xs text-[white]">
                         Expand
                       </button>
                     </div>
@@ -268,7 +282,7 @@ function Community() {
                     <div>
                       {msg.text}
                       {msg.sender === 'ai' && (
-                        <button onClick={() => toggleCollapse(index)} className="text-xs text-blue-500 ml-2">
+                        <button onClick={() => toggleCollapse(index)} className="text-xs text-[white] ml-2">
                           {collapsedMessages.has(index) ? 'Expand' : 'Collapse'}
                         </button>
                       )}
@@ -276,33 +290,30 @@ function Community() {
                   )}
                 </div>
                 {msg.replyTo && (
-                  <div className="text-gray-500 dark:text-gray-300 mt-1 text-xs italic">
+                  <div className="text-[#a06e91] mt-1 text-xs italic">
                     Replying to: {messages[msg.replyTo]?.text || 'Unknown message'}
                   </div>
                 )}
-                <div className="text-gray-500 dark:text-gray-300 mt-1 text-right text-xs">
-                  {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
-                </div>
-                <div className="flex space-x-2 mt-1 text-xs text-gray-500 dark:text-gray-300">
+                <div className="flex space-x-2 mt-1 text-xs text-[#a06e91]">
                   {msg.sender !== 'ai' && (
                     <>
                       <button onClick={() => handleLike(index)} className="flex items-center space-x-1">
-                        {likedMessages.has(index)} <FaThumbsUp className="text-sm" /> <span>{msg.likes}</span>
+                        {likedMessages.has(index)} <FaThumbsUp className="text-xs" /> <span>{msg.likes}</span>
                       </button>
                       <button onClick={() => handleCopy(msg.text)} className="flex items-center space-x-1">
-                        <FaCopy className="text-sm" />
+                        <FaCopy className="text-xs" />
                       </button>
                       <button onClick={() => handleDownload(msg.text)} className="flex items-center space-x-1">
-                        <FaDownload className="text-sm" />
+                        <FaDownload className="text-xs" />
                       </button>
                       <button onClick={() => handleShare(msg.text)} className="flex items-center space-x-1">
-                        <FaShareAlt className="text-sm" />
+                        <FaShareAlt className="text-xs" />
                       </button>
                       <button onClick={() => handleReply(msg)} className="flex items-center space-x-1">
-                        <FaReply className="text-sm" />
+                        <FaReply className="text-xs" />
                       </button>
                       <button onClick={() => requestAiResponse(msg.text)} className="flex items-center space-x-1">
-                        <FaRobot className="text-sm" />
+                        <FaRobot className="text-xs" />
                         <span>Ask AI</span>
                       </button>
                     </>
@@ -311,13 +322,15 @@ function Community() {
               </div>
             </div>
           ))}
-          {isTyping && (
-            <div className="text-gray-500 dark:text-gray-300">AI is typing...</div>
+          {typingUser && (
+            <div className="text-[black] mt-2 italic">
+              {typingUser} is typing...
+            </div>
           )}
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="bg-gray-50 dark:bg-gray-700 p-3 flex items-center space-x-2 border-t border-gray-300 dark:border-gray-600">
+      <div className="bg-[#fff] p-3 flex items-center space-x-2 border-t border-[#a06e91]">
         <input
           type="text"
           value={input}
@@ -329,9 +342,9 @@ function Community() {
             }
           }}
           placeholder="Type your message..."
-          className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+          className="flex-1 p-2 border border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
         />
-        <button onClick={sendMessage} className="px-4 py-2 bg-blue-500 text-white rounded-md">Send</button>
+        <button onClick={sendMessage} className="px-8 py-1.5 bg-[#a06e91] text-lg text-bold text-[#fff] rounded-md">Send</button>
       </div>
     </div>
   );

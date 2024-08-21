@@ -43,9 +43,9 @@ function ShowEmergencyContact() {
   }, []);
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
-      <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Your Saved Emergency Contacts</h2>
-      <div className="mb-4">
+    <div className="col-span-full xl:col-span-6 bg-white rounded-xl p-6">
+      <h2 className="text-sm font-semibold text-[#a06e91] mb-4">Your Saved Emergency Contacts</h2>
+      <div className="mb-4 text-[#a06e91] text-sm ">
         {isContactsVisible && (
           <ul className="list-disc pl-5">
             {contacts.map((contact) => (
@@ -66,7 +66,7 @@ function ShowEmergencyContact() {
                   <strong>Notes:</strong> {contact.notes}
                 </div>
                 <button
-                  className="bg-blue-500 text-white p-2 rounded-sm mt-2 mr-2"
+                  className="bg-[#a06e91] text-[white] p-2 rounded border-2 hover:bg-[white] hover:border-[#a06e91] hover:text-[#a06e91] transition duration-300"
                   onClick={() => setEditingContactId(contact.id)}
                 >
                   Edit

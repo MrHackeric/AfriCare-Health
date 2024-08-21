@@ -8,3 +8,7 @@
 @import 'additional-styles/flatpickr.css';
 
 @import 'tailwindcss/utilities';
+
+.placeholder-pink::placeholder {
+    color: #a06e91;
+  }

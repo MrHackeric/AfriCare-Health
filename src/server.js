@@ -76,8 +76,8 @@ io.on('connection', (socket) => {
     })
     .catch((err) => console.error('Error getting messages:', err));
 
-  socket.emit('message', formatMessage(botName, 'Welcome to Africare!'));
-  socket.broadcast.emit('message', formatMessage(botName, 'A user has joined the chat'));
+  socket.emit('message', formatMessage(botName, 'Welcome to Africare Community Support!'));
+  // socket.broadcast.emit('message', formatMessage(botName, 'A user has joined the chat'));
 
   socket.on('chatMessage', async (msg) => {
     const message = formatMessage(msg.sender, msg.text);
@@ -106,7 +106,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    io.emit('message', formatMessage(botName, 'A user has left the chat'));
+    // io.emit('message', formatMessage(botName, 'A user has left the chat'));
   });
 });
 
