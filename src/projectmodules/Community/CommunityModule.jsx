@@ -261,13 +261,13 @@ function Community() {
             >
               <div className="relative max-w-md">
                 <div
-                  className={`flex flex-col justify-between p-2 rounded-md max-w-md text-[#a06e91] ${
-                    msg.sender === currentUser?.uid ? 'bg-[#874c78] text-[#874c78]' : 'bg-[#a06e91]'//User-Right-Left
+                  className={`flex flex-col justify-between p-2 rounded-md max-w-md text-[#fff] ${
+                    msg.sender === currentUser?.uid ? 'bg-[#874c78] text-[#fff]' : 'bg-[#a06e91]'//User-Right-Left
                   }`}
                 >
 
               
-                <div className="self-end text-[8px] text-[#a06e91] mt-2">
+                <div className="self-end text-[8px] text-[#fff] mt-2">
                   {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
                 </div>
 
