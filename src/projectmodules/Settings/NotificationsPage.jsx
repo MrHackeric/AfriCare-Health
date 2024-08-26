@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Sidebar from '../../Header&Sidebar/Sidebar';
+import Header from '../../Header&Sidebar/Header';
 
 const NotificationsPage = () => {
   const [initialValues, setInitialValues] = useState({
@@ -36,82 +38,88 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-2xl w-full">
-        <header className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center">
-            Notification Preferences
-          </h2>
-        </header>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={NotificationSchema}
-          enableReinitialize={true}
-          onSubmit={handleFormSubmit}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <Field
-                    type="checkbox"
-                    name="emailAlerts"
-                    id="emailAlerts"
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor="emailAlerts"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-200"
-                  >
-                    Email Alerts
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <Field
-                    type="checkbox"
-                    name="smsNotifications"
-                    id="smsNotifications"
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor="smsNotifications"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-200"
-                  >
-                    SMS Notifications
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <Field
-                    type="checkbox"
-                    name="pushNotifications"
-                    id="pushNotifications"
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor="pushNotifications"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-200"
-                  >
-                    Push Notifications
-                  </label>
-                </div>
-              </div>
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        <Header />
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-2xl w-full">
+            <header className="mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center">
+                Notification Preferences
+              </h2>
+            </header>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={NotificationSchema}
+              enableReinitialize={true}
+              onSubmit={handleFormSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <div className="space-y-4">
+                    <div className="flex items-center">
+                      <Field
+                        type="checkbox"
+                        name="emailAlerts"
+                        id="emailAlerts"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="emailAlerts"
+                        className="text-sm font-medium text-gray-700 dark:text-gray-200"
+                      >
+                        Email Alerts
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <Field
+                        type="checkbox"
+                        name="smsNotifications"
+                        id="smsNotifications"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="smsNotifications"
+                        className="text-sm font-medium text-gray-700 dark:text-gray-200"
+                      >
+                        SMS Notifications
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <Field
+                        type="checkbox"
+                        name="pushNotifications"
+                        id="pushNotifications"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="pushNotifications"
+                        className="text-sm font-medium text-gray-700 dark:text-gray-200"
+                      >
+                        Push Notifications
+                      </label>
+                    </div>
+                  </div>
 
-              {status && (
-                <div className="mt-4 text-center text-sm text-green-500">{status}</div>
+                  {status && (
+                    <div className="mt-4 text-center text-sm text-green-500">{status}</div>
+                  )}
+
+                  <div className="mt-6 flex items-center justify-center">
+                    <button
+                      type="submit"
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Updating...' : 'Update Preferences'}
+                    </button>
+                  </div>
+                </Form>
               )}
-
-              <div className="mt-6 flex items-center justify-center">
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Updating...' : 'Update Preferences'}
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
+            </Formik>
+          </div>
+        </div>
       </div>
     </div>
   );
