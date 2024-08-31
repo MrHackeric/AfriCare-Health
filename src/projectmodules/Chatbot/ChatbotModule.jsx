@@ -145,39 +145,38 @@ function Chatbot() {
   const toggleShowAllStarred = () => setShowAllStarred((prev) => !prev);
 
   return (
-    <div className="col-span-full xl:col-span-12 bg-[white] h-full flex flex-col text-xs">
+    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <div className="p-1 flex flex-col flex-1 relative">
-        <div className="dark:bg-[#a06e91] rounded-xl flex flex-col h-full relative" ref={chatContainerRef}>
-          <header className="px-3 py-2 border-b border-[#a06e91]">
-            <h2 className="text-sm font-semibold text-[#a06e91]">Chatbot</h2>
+          <header className="px-3 py-2">
+            <h2 className="font-semibold text-gray-800 dark:text-gray-100">Chatbot</h2>
           </header>
           <div className="flex flex-col flex-1 overflow-hidden relative">
-            <div className="flex-1 overflow-y-auto p-2 bg-[#fff]">
+            <div className="flex-1 overflow-y-auto p-2">
               {messages.map((msg, index) => (
                 <div key={index} className={`message ${msg.sender === 'bot' ? 'text-left' : 'text-right'} my-1`}>
                   <span
-                    className={`inline-block p-1 rounded-md max-w-md ${msg.sender === 'bot' ? 'bg-[#fff] text-[#a06e91] text-[12px]' : 'bg-[#a06e91] text-[white] text-[12px]'}`}
+                    className={`inline-block p-1 rounded-md max-w-md ${msg.sender === 'bot' ? 'bg-gray-100 text-[12px] text-[black]' : 'bg-violet-200 text-[black] text-[12px]' }`}
                     dangerouslySetInnerHTML={{ __html: formatText(msg.text) }}
                   />
-                    <div className="self-end text-[10px] text-[#a06e91] mt-2">
+                    <div className="self-end text-[8px] dark:text-gray-200 text-gray-800 mt-2">
                       {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
                     </div>
                   {!error && msg.sender === 'bot' && (
                     <div className="flex space-x-1 mt-1">
                       <button onClick={() => handleShareMessage(msg.text)}>
-                        <FaShare className="text-[#a06e91] text-xs" />
+                        <FaShare className="dark:text-gray-200 text-gray-800 text-[10px]" />
                       </button>
                       <button onClick={() => handleCopyMessage(msg.text)}>
-                        <FaCopy className="text-[#a06e91] text-xs" />
+                        <FaCopy className="dark:text-gray-200 text-gray-800 text-[10px]" />
                       </button>
                       <button onClick={() => handleDownloadMessage(msg.text)}>
-                        <FaDownload className="text-[#a06e91] text-xs" />
+                        <FaDownload className="dark:text-gray-200 text-gray-800 text-[10px]" />
                       </button>
                       <button onClick={() => handleStarMessage(msg)}>
                         {starredMessages.some((starredMsg) => starredMsg.timestamp === msg.timestamp) ? (
-                          <FaStar className="text-[#a06e91] text-xs" />
+                          <FaStar className="dark:text-gray-200 text-gray-800 text-[10px]" />
                         ) : (
-                          <FaRegStar className="text-[#a06e91] text-xs" />
+                          <FaRegStar className="dark:text-gray-200 text-gray-800 text-[10px]" />
                         )}
                       </button>
                     </div>
@@ -191,20 +190,20 @@ function Chatbot() {
               )}
               <div ref={messagesEndRef}></div>
             </div>
-            <div className="flex items-center p-2 border-t border-[#a06e91]">
+            <div className="flex items-center p-2 border-t border-gray-200">
             <input
               value={caption} // Make sure this matches the state variable name
               onChange={(e) => setCaption(e.target.value)}
               onKeyDown={handleKeyDown}
               type="text"
-              className="flex-1 p-2 border text-[12px] border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
+              className="text-[12px] text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md"
               placeholder="Type your message here..."
             />
               <button
                 onClick={handleSendClick}
-                className="ml-2 p-2 bg-[#a06e91] text-white rounded-md flex items-center"
+                className="ml-1 px-3 py-2.5 dark:bg-white bg-violet-200 text-violet-800 rounded-md flex items-center"
               >
-                <FaPaperPlane className="text-white" />
+                <FaPaperPlane className="text-violet-800" />
                 <span className="ml-1 text-[12px]">Send</span>
               </button>
               {loading && (
@@ -213,13 +212,13 @@ function Chatbot() {
                 </div>
               )}
             </div>
-            <div className="flex items-center p-2 border-t border-[#a06e91]" />
+            <div className="flex items-center p-2 border-t border-gray-200" />
           </div>
-          <button className="absolute top-2 right-2 text-[12px] text-[#a06e91]" onClick={toggleShowStarred}>
+          <button className="absolute top-2 right-2 text-[12px] dark:text-gray-200 text-gray-800" onClick={toggleShowStarred}>
             {showStarred ? 'Hide Starred' : 'Show Starred'}
           </button>
           {showStarred && (
-            <div className="absolute top-10 right-20 bg-[#a06e91] bg-opacity-100 shadow-md rounded-lg p-2 max-h-48 overflow-y-auto">
+            <div className="absolute top-10 right-20 dark:bg-gray-600 bg-gray-700 shadow-md rounded-lg p-2 max-h-48 overflow-y-auto">
               {starredMessages.length > 0 ? (
                 starredMessages.slice(0, showAllStarred ? starredMessages.length : 5).map((msg, index) => (
                   <div key={index} className="text-sm mb-1">
@@ -236,7 +235,6 @@ function Chatbot() {
           )}
         </div>
       </div>
-    </div>
   );
 }
 

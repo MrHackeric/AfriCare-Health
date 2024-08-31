@@ -5,10 +5,11 @@ import Header from '../../Header&Sidebar/Header';
 
 import Community from './CommunityModule';
 
+
 function CommunityPage() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}

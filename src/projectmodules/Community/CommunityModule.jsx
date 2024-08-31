@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-import { FaThumbsUp, FaCopy, FaDownload, FaShareAlt, FaReply, FaEllipsisV, FaRobot } from 'react-icons/fa';
+import { FaThumbsUp, FaCopy, FaPaperPlane, FaDownload, FaShareAlt, FaReply, FaEllipsisV, FaRobot } from 'react-icons/fa';
 import { auth } from '../Auth/firebase-config'; 
 import { onAuthStateChanged } from 'firebase/auth';
+
 
 const socket = io('http://localhost:3030');
 const aiSocket = io('http://localhost:3030'); // AI service socket connection
@@ -19,6 +20,8 @@ function Community() {
   const [collapsedMessages, setCollapsedMessages] = useState(new Set()); // State for collapsed messages
   const messagesEndRef = useRef(null);
   const dropdownRef = useRef(null);
+
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -248,13 +251,10 @@ function Community() {
   };
   
   return (
-    <div className="col-span-full xl:col-span-12 bg-[white] rounded-xl h-full flex flex-col text-xs">
+    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <div className="p-3 flex flex-col flex-1 relative">
-        <div className="bg-[#fff] p-4 rounded-sm overflow-y-auto flex-1">
-          <header className="px-3 py-2 border-b border-[#a06e91]">
-            <h2 className="text-sm font-semibold text-[#a06e91]">Community</h2>
-          </header>
-          {messages.map((msg, index) => (
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Community</h2>
+      {messages.map((msg, index) => (
             <div
               key={index}
               className={`my-2 flex ${msg.sender === currentUser?.uid ? 'justify-end' : 'justify-start'}`}
@@ -262,12 +262,12 @@ function Community() {
               <div className="relative max-w-md">
                 <div
                   className={`flex flex-col justify-between p-2 rounded-md max-w-md text-[#fff] ${
-                    msg.sender === currentUser?.uid ? 'bg-[#874c78] text-[#fff]' : 'bg-[#a06e91]'//User-Right-Left
+                    msg.sender === currentUser?.uid ? 'bg-violet-200 text-[black] text-[12px]' : 'bg-gray-100 text-[12px] text-[black]'//User-Left-Right
                   }`}
                 >
 
               
-                <div className="self-end text-[8px] text-[#fff] mt-2">
+                <div className="self-end text-[8px] italic mt-2">
                   {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
                 </div>
 
@@ -290,29 +290,29 @@ function Community() {
                   )}
                 </div>
                 {msg.replyTo && (
-                  <div className="text-[#a06e91] mt-1 text-xs italic">
+                  <div className="text-[#000] mt-1 text-xs italic">
                     Replying to: {messages[msg.replyTo]?.text || 'Unknown message'}
                   </div>
                 )}
-                <div className="flex space-x-2 mt-1 text-xs text-[#a06e91]">
+                <div className="flex space-x-2 mt-1 text-[10px] dark:bg-gray-800">
                   {msg.sender !== 'ai' && (
                     <>
-                      <button onClick={() => handleLike(index)} className="flex items-center space-x-1">
+                      <button onClick={() => handleLike(index)} className="dark:text-white text-black flex items-center space-x-1">
                         {likedMessages.has(index)} <FaThumbsUp className="text-xs" /> <span>{msg.likes}</span>
                       </button>
-                      <button onClick={() => handleCopy(msg.text)} className="flex items-center space-x-1">
+                      <button onClick={() => handleCopy(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaCopy className="text-xs" />
                       </button>
-                      <button onClick={() => handleDownload(msg.text)} className="flex items-center space-x-1">
+                      <button onClick={() => handleDownload(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaDownload className="text-xs" />
                       </button>
-                      <button onClick={() => handleShare(msg.text)} className="flex items-center space-x-1">
+                      <button onClick={() => handleShare(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaShareAlt className="text-xs" />
                       </button>
-                      <button onClick={() => handleReply(msg)} className="flex items-center space-x-1">
+                      <button onClick={() => handleReply(msg)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaReply className="text-xs" />
                       </button>
-                      <button onClick={() => requestAiResponse(msg.text)} className="flex items-center space-x-1">
+                      <button onClick={() => requestAiResponse(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaRobot className="text-xs" />
                         <span>Ask AI</span>
                       </button>
@@ -323,14 +323,13 @@ function Community() {
             </div>
           ))}
           {typingUser && (
-            <div className="text-[black] mt-2 italic">
+            <div className="text-[#fff] mt-2 italic">
               {typingUser} is typing...
             </div>
           )}
           <div ref={messagesEndRef} />
-        </div>
       </div>
-      <div className="bg-[#fff] p-3 flex items-center space-x-2 border-t border-[#a06e91]">
+      <div className="p-3 flex items-center space-x-2 border-t border-gray-600">
         <input
           type="text"
           value={input}
@@ -342,9 +341,13 @@ function Community() {
             }
           }}
           placeholder="Type your message..."
-          className="flex-1 p-2 border border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
+          className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md"
         />
-        <button onClick={sendMessage} className="px-8 py-1.5 bg-[#a06e91] text-lg text-bold text-[#fff] rounded-md">Send</button>
+        <button onClick={sendMessage} className="ml-1 px-3 py-2.5 dark:bg-white bg-violet-200 text-violet-800 rounded-md flex items-center"
+        >
+          <FaPaperPlane className="text-violet-800" />
+          <span className="ml-1 text-[12px]">Send</span>
+        </button>
       </div>
     </div>
   );

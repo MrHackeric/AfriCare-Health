@@ -11,8 +11,8 @@ const NotFoundPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#fff]">
-      <div className="text-center p-8 bg-white rounded-lg">
+    <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-800">
+      <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg">
         <div className="mb-8">
           <Lottie
             options={{
@@ -27,15 +27,15 @@ const NotFoundPage = () => {
             width={200}
           />
         </div>
-        <h1 className="text-[100px] font-bold text-[#a06e91] mb-4">
+        <h1 className="font-semibold text-gray-800 dark:text-gray-100 text-[100px] mb-4">
           404
         </h1>
-        <p className="text-[30px] text-[#a06e91] mb-6">
+        <p className="font-semibold text-gray-800 dark:text-gray-100 text-[30px] mb-4">
           Oops! The page you’re looking for doesn’t exist.
         </p>
         <button
           onClick={handleGoHome}
-          className="bg-[#a06e91] text-white font-semibold py-2 px-4 rounded-md shadow-sm"
+          className="bg-gray-800 text-gray-200 dark:bg-gray-200 dark:text-gray-800 font-semibold py-2 px-4 rounded-md shadow-sm"
         >
           Go to Homepage
         </button>

@@ -43,9 +43,10 @@ function ShowEmergencyContact() {
   }, []);
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-white rounded-xl p-6">
-      <h2 className="text-sm font-semibold text-[#a06e91] mb-4">Your Saved Emergency Contacts</h2>
-      <div className="mb-4 text-[#a06e91] text-sm ">
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+      <div className="p-3 flex flex-col flex-1 relative">
+      <h2 className="font-semibold text-gray-800 dark:text-gray-100">Your Saved Emergency Contacts</h2>
+      <div className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">
         {isContactsVisible && (
           <ul className="list-disc pl-5">
             {contacts.map((contact) => (
@@ -66,7 +67,7 @@ function ShowEmergencyContact() {
                   <strong>Notes:</strong> {contact.notes}
                 </div>
                 <button
-                  className="bg-[#a06e91] text-[white] p-2 rounded border-2 hover:bg-[white] hover:border-[#a06e91] hover:text-[#a06e91] transition duration-300"
+                  className="px-3 py-2 dark:bg-white bg-violet-200 text-[13px] text-violet-800 rounded-md flex items-center"
                   onClick={() => setEditingContactId(contact.id)}
                 >
                   Edit
@@ -87,6 +88,7 @@ function ShowEmergencyContact() {
 
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
     </div>
+  </div>
   );
 }
 

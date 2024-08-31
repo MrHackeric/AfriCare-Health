@@ -23,13 +23,13 @@ const data = [
 
 function Services() {
   return (
-    <section className="flex justify-center px-4 pb-8 pt-8 bg-[#f7f0f7]">
+    <section className="flex justify-center px-4 pb-8 pt-8 dark:bg-gray-800 bg-gray-200">
       <div className="max-w-[1200px] flex flex-wrap gap-6 justify-center">
-        <h2 className="w-full text-4xl font-bold text-center mb-8 text-[#874c78] relative">
+        <h2 className="w-full text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200 relative">
           Our Services
-          <span className="block w-20 h-[3px] bg-[#f2b1de] mx-auto mt-2"></span>
+          <span className="block w-20 h-[3px] dark:bg-gray-700 bg-gray-700 mx-auto mt-2"></span>
         </h2>
-        <h3 className="text-2xl font-semibold text-center text-[#a06e91] mb-4">
+        <h3 className="text-2xl font-semibold text-center text-gray-200 dark:gray-800 mb-4">
           Explore Our Comprehensive Services Designed to Support Your Maternal Health Journey
         </h3>
         {data.map((service, index) => (

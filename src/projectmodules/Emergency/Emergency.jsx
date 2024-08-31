@@ -3,7 +3,6 @@ import { ref, set, onValue } from 'firebase/database';
 import { realtimeDb } from '../Auth/firebase-config'; // Import your Realtime Database configuration
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import EditEmergencyContact from './EditEmergencyContact'; // Import the EditEmergencyContact component
 
 function Emergency() {
   const [contacts, setContacts] = useState([]);
@@ -37,34 +36,36 @@ function Emergency() {
   };
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-[#fff] rounded-xl p-6">
-      <h2 className="text-sm font-semibold text-[#a06e91] mb-4">Emergency Contacts</h2>
-
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+      <div className="p-3 flex flex-col flex-1 relative">
+      <h2 className="font-semibold text-gray-800 dark:text-gray-100">Emergency Contacts</h2>
+      
       <div className="mb-4">
-        <h3 className="text-sm font-medium text-[#a06e91]">Add New Contact</h3>
+        
+        <h3 className="text-[12px] font-medium text-gray-800 dark:text-gray-100">Add New Contact</h3>
         <input
           type="text"
           placeholder="Name"
-          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
+          className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
           value={newContact.name}
           onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
         />
         <input
           type="tel"
           placeholder="Phone Number"
-          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
+          className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
           value={newContact.phone}
           onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
         />
         <input
           type="email"
           placeholder="Email Address"
-          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink type-pink"
+          className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
           value={newContact.email}
           onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
         />
         <select
-          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
+          className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
           value={newContact.relationship}
           onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
         >
@@ -77,16 +78,17 @@ function Emergency() {
         </select>
         <textarea
           placeholder="Notes"
-          className="text-sm p-2 border w-full mt-2 border-[#a06e91] text-[#a06e91] rounded-md placeholder-pink"
+          className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
           value={newContact.notes}
           onChange={(e) => setNewContact({ ...newContact, notes: e.target.value })}
         />
-        <button className="text-sm bg-[#a06e91] text-[white] p-2 rounded border-2 hover:bg-[white] hover:border-[#a06e91] hover:text-[#a06e91] transition duration-300" onClick={addContact}>
+        <button className="ml-1 px-3 py-2.5 dark:bg-white bg-violet-200 text-[13px] text-violet-800 rounded-md flex items-center" onClick={addContact}>
           Add Contact
         </button>
       </div>
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
     </div>
+  </div>
   );
 }
 

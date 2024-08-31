@@ -36,29 +36,29 @@ function FAQ() {
   };
 
   return (
-    <section className="faq bg-gray-100 dark:bg-[white] px-4 pb-20 pt-10">
+    <section className="faq bg-gray-100 dark:bg-gray-700 px-4 pb-20 pt-10">
       <div className="max-w-[1200px] mx-auto">
-        <h2 className="text-4xl font-bold text-center dark:text-[#874c78] mb-[2.5rem]">
+        <h2 className="text-4xl font-bold text-center dark:text-gray-200 text-gray-800 mb-[2.5rem]">
           Frequently Asked Questions
-          <span className="block w-20 h-[3px] bg-[#f2b1de]  mx-auto mt-2"></span>
+          <span className="block w-20 h-[3px] dark:bg-gray-200 bg-gray-800 mx-auto mt-2"></span>
         </h2>
         <div className="space-y-8">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border-b border-gray-300 dark:border-[#874c78] pb-4"
+              className="border-b border-gray-300 dark:border-gray-100 pb-4"
             >
               <div
-                className="flex justify-between items-center text-xl font-semibold dark:text-[#a06e91] cursor-pointer"
+                className="flex justify-between items-center text-xl font-semibold dark:text-gray-200 cursor-pointer"
                 onClick={() => toggleFAQ(index)}
               >
-                <h3 className="text-[#874c78]">{faq.question}</h3>
+                <h3 className="dark:text-gray-200 text-gray-800">{faq.question}</h3>
                 <span className="text-2xl">
                   {openQuestion === index ? "-" : "+"}
                 </span>
               </div>
               {openQuestion === index && (
-                <p className="mt-2 text-gray-600 dark:text-[#a06e91]">
+                <p className="mt-2 text-gray-600 dark:text-gray-400">
                   {faq.answer}
                 </p>
               )}

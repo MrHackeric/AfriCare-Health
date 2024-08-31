@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import Sidebar from '../../Header&Sidebar/Sidebar';
 import Header from '../../Header&Sidebar/Header';
+import AdvisorPage from './AdvisorPage';
+
 function Dashboard() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -24,6 +26,7 @@ function Dashboard() {
               </div>
             </div>
             {/* Cards */}
+            <AdvisorPage />
             <div className="grid grid-cols-12 gap-6">
             </div>
           </div>
