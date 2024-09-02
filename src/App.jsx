@@ -18,7 +18,7 @@ import BillingPlans from './projectmodules/Settings/BillingPlans';
 import BillingInvoices from './projectmodules/Settings/BillingInvoices';
 import AccountDetailsPage from './projectmodules/Settings/AccountDetailsPage';
 import NotificationsPage from './projectmodules/Settings/NotificationsPage';
-import EmergencyPage from './projectmodules/emergency/EmergencyPage';
+import EmergencyPage from './projectmodules/Emergency/EmergencyPage';
 import Landing from './projectmodules/Landing/Landing';
 import NotFoundPage from './projectmodules/NotFound/NotFoundPage'; // Import a NotFound page
 
