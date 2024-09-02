@@ -5,11 +5,11 @@ import ThemeProvider from './utils/ThemeContext';
 import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <React>
     <Router>
       <ThemeProvider>
         <App />
       </ThemeProvider>
     </Router>
-  </React.StrictMode>
+  </React>
 );
