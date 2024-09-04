@@ -35,36 +35,35 @@ Africare aims to provide a holistic solution to these challenges by:
 The repository is organized into several directories to separate different aspects of the project. Below is an overview of the directory structure:
 
 ```
-AfriCare-Health/
+/project-root
 │
-├── src/
-│   ├── projectmodules/
-│   │   ├── Auth/
-│   │   ├── chatbot/
-│   │   ├── community/
-│   │   ├── dashboardmain/
-│   │   ├── forgotpass/
-│   │   ├── maps/
-│   │   ├── notfound/
-│   │   ├── signin/
-│   │   └── signout/
-│   │
-│   ├── supportmodules/
-│   │
-│   ├── utils/
-│   │
-│   ├── components/
-│   │
-│   ├── css/
-│   │
-│   └── images/
+├── /client                    # Frontend code (React + Vite)
+│   ├── /node_modules          # Node.js modules for the frontend
+│   ├── /public                # Public assets like index.html
+│   ├── /src                   # Source code for the React application
+│   ├── package.json           # Frontend-specific dependencies and scripts
+│   ├── vite.config.js         # Vite configuration file
+│   └── ...                    # Other frontend-specific files
 │
-└── README.md
+├── /server                    # Backend code (Node.js)
+│   ├── /node_modules          # Node.js modules for the backend
+│   ├── /config                # Configuration files
+│   ├── /controllers           # Controller functions
+│   ├── /models                # Database models
+│   ├── /routes                # API routes
+│   ├── /services              # Business logic and services
+│   ├── package.json           # Backend-specific dependencies and scripts
+│   ├── index.js               # Main entry point for the Node.js server
+│   └── ...                    # Other backend-specific files
+│
+├── .gitignore                 # Git ignore file
+├── README.md                  # Project documentation
 ```
 
 ## Explanation of the Directory Structure
 
 - **`src/projectmodules/`**: Contains all the main project modules and authentication components. Each subdirectory represents a different functional area or feature of the application:
+
   - **`Auth/`**: Components related to authentication functionality.
   - **`chatbot/`**: Components and logic for the chatbot functionality.
   - **`community/`**: Components related to community features.
