@@ -19,6 +19,11 @@ import {
 } from "firebase/firestore";
 import chatbot from "./chatbot/chatbot.js";
 
+// Store the user's email
+let userEmail = '';
+
+
+
 // Initialize dotenv
 dotenv.config();
 
@@ -76,20 +81,18 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  // Send message history from Firestore
-  db.collection("messages")
-    .get()
-    .then((snapshot) => {
-      const messages = snapshot.docs.map((doc) => doc.data());
-      socket.emit("messageHistory", messages);
-    })
-    .catch((err) => console.error("Error getting messages:", err));
 
   socket.emit(
     "message",
     formatMessage(botName, "Welcome to Africare Community Support!")
   );
   // socket.broadcast.emit('message', formatMessage(botName, 'A user has joined the chat'));
+
+  // Capture the user's email when they join
+io.on('userEmail', (email) => {
+  userEmail = email;
+});
+
 
   socket.on("chatMessage", async (msg) => {
     const message = formatMessage(msg.sender, msg.text);
@@ -111,54 +114,25 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("typing", () => {
-    socket.broadcast.emit("typing");
+
+
+
+  socket.on('typing', (user) => {
+    socket.broadcast.emit('userTyping', user); // Broadcast to all except sender
   });
 
-  socket.on("stopTyping", () => {
-    socket.broadcast.emit("stopTyping");
+  socket.on('stopTyping', (user) => {
+    socket.broadcast.emit('userStopTyping', user); // Broadcast to all except sender
   });
 
   socket.on("disconnect", () => {
-    // io.emit('message', formatMessage(botName, 'A user has left the chat'));
-  });
+    if (userEmail) {
+      console.log(`User with email ${userEmail} disconnected`);
+    } else {
+      console.log('A user disconnected');
+    }});
 });
 
-//Fetch messages from firestore
-const fetchMessages = async () => {
-  const db = getFirestore();
-  const messagesRef = collection(db, "messages"); // Adjust 'messages' to your collection name
-  const q = query(messagesRef, orderBy("timestamp")); // Adjust 'timestamp' to your field name for ordering
-
-  try {
-    const querySnapshot = await getDocs(q);
-    const messages = querySnapshot.docs.map((doc) => doc.data());
-    return messages;
-  } catch (error) {
-    console.error("Error fetching messages: ", error);
-    return [];
-  }
-};
-
-//Real-time updates
-const useMessages = () => {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    const db = getFirestore();
-    const messagesRef = collection(db, "messages");
-    const q = query(messagesRef, orderBy("timestamp"));
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = querySnapshot.docs.map((doc) => doc.data());
-      setMessages(messages);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  return messages;
-};
 
 //chatbot component
 app.use("/", chatbot);
