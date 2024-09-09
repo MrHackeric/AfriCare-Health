@@ -1,127 +1,92 @@
 import React, { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
+import { socket, aiSocket } from './socket';
+import { fetchMessages, sendMessage, likeMessage } from './messageService';
+import { requestAiResponse } from './aiService';
+import { fetchUserEmail } from './userService';
 import { FaThumbsUp, FaCopy, FaPaperPlane, FaDownload, FaShareAlt, FaReply, FaEllipsisV, FaRobot } from 'react-icons/fa';
-import { auth } from '../Auth/firebase-config'; 
-import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { handleTyping, useTypingNotifications } from './typingService';
 
-
-const socket = io('http://localhost:3030');
-const aiSocket = io('http://localhost:3030'); // AI service socket connection
 
 function Community() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [typingUser, setTypingUser] = useState('');
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [currentUser, setCurrentUser] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
-  const [dropdownIndex, setDropdownIndex] = useState(null); // State for managing which message dropdown is open
-  const [aiReplies, setAiReplies] = useState(new Set()); // State for AI replies
+  const [typingUser, setTypingUser] = useState('');
   const [collapsedMessages, setCollapsedMessages] = useState(new Set()); // State for collapsed messages
+
   const messagesEndRef = useRef(null);
+  const auth = getAuth();
   const dropdownRef = useRef(null);
 
 
-
+  
+  // Function to retrieve messages from Firestore
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user);
-      } else {
-        setCurrentUser(null);
-      }
-    });
-
-    return () => unsubscribe();
+    fetchMessages(setMessages);
   }, []);
 
-  useEffect(() => {
-    socket.on('message', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, { ...msg, likes: 0 }]);
-    });
+  // Function to Reply to Messages
+  const handleReply = async (message) => {
+    const senderEmail = await fetchUserEmail(message.sender);
+    if (senderEmail) {
+      setReplyTo(message);
+      setInput(`@${senderEmail}: `);
+    }
+  };
 
-    socket.on('chatMessage', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, { ...msg, likes: msg.likes || 0 }]);
-    });
-
-    socket.on('updateLikes', ({ index, likes }) => {
-      setMessages((prevMessages) => {
-        const newMessages = [...prevMessages];
-        if (newMessages[index]) {
-          newMessages[index].likes = likes;
-        }
-        return newMessages;
-      });
-    });
-
-    socket.on('userTyping', (user) => {
-      if (user !== currentUser?.displayName) {
-        setTypingUser(user);
-      }
-    });
-
-    socket.on('userStopTyping', (user) => {
-      if (user === typingUser) {
-        setTypingUser('');
-      }
-    });
-
-    return () => {
-      socket.off('message');
-      socket.off('updateLikes');
-      socket.off('userTyping');
-      socket.off('userStopTyping');
-    };
-  }, [currentUser, typingUser]);
-
-  useEffect(() => {
-    aiSocket.on('aiResponse', (response) => {
-      setMessages((prevMessages) => [...prevMessages, response]);
-      setAiReplies((prevReplies) => new Set([...prevReplies, response.id]));
-    });
-
-    return () => aiSocket.off('aiResponse');
-  }, []);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownIndex(null); // Close dropdown if clicked outside
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const sendMessage = () => {
-    if (input.trim() && currentUser) {
+  // Function to handle message sending
+  const handleSendMessage = () => {
+    if (input.trim() && currentUser?.uid) {
       const message = {
-        sender: currentUser.uid, 
+        sender: currentUser.uid,
         text: input.trim(),
         timestamp: new Date(),
         likes: 0,
         replyTo: replyTo,
       };
-      socket.emit('chatMessage', message);
-      socket.emit('stopTyping');
-      setInput('');
-      setReplyTo(null);
+      sendMessage(message, socket, setMessages, setInput, setReplyTo); // Using the imported sendMessage function
     }
   };
+  useEffect(() => {
+    // Ensure messages are fetched only when user is authenticated
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        fetchMessages();
+      }
+    });
+    // Clean up listener on component unmount
+    return () => unsubscribeAuth();
+  }, []);
 
-  const handleTyping = (e) => {
-    setInput(e.target.value);
-    if (e.target.value.trim()) {
-      socket.emit('typing', currentUser?.displayName || currentUser?.email || 'Anonymous');
-    } else {
-      socket.emit('stopTyping', currentUser?.displayName || currentUser?.email || 'Anonymous');
-    }
+
+
+  const handleLikeMessage = (index) => {
+    likeMessage(index, likedMessages, setLikedMessages);
   };
 
+  // Function to handle AI response request
+  const handleAiResponse = (text) => {
+    requestAiResponse(text, setMessages); // Trigger AI response
+  };
+
+  // Automatically scroll to the latest message when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+  
+  //Logic to handle user typing
+  const handleTypingChange = (e) => {
+    handleTyping(e, socket, currentUser, setInput, setTypingUser);
+  };
+
+  // Hook to manage typing notifications
+  useTypingNotifications(socket, currentUser, typingUser, setTypingUser);
+
+  //Logic to handle likes
   const handleLike = (index) => {
     const liked = likedMessages.has(index);
     socket.emit('likeMessage', { index, liked: !liked });
@@ -136,10 +101,12 @@ function Community() {
     });
   };
 
+  //Logic to handle copying of texts
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text).then(() => alert('Message copied!'));
   };
 
+  //Logic to handle downloading texts
   const handleDownload = (text) => {
     const element = document.createElement('a');
     const file = new Blob([text], { type: 'text/plain' });
@@ -150,6 +117,7 @@ function Community() {
     document.body.removeChild(element);
   };
 
+  //Logic to handle sharing of messages
   const handleShare = (text) => {
     if (navigator.share) {
       navigator
@@ -164,77 +132,9 @@ function Community() {
     }
   };
 
-  const handleReply = (message) => {
-    setReplyTo(message);
-    setInput(`@${message.sender}: `);
-  };
-
 
   const toggleDropdown = (index) => {
     setDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-
-  
-  const requestAiResponse = async (text) => {
-    // Generate a unique ID for the placeholder message
-    const placeholderId = `placeholder-${Date.now()}`;
-  
-    // Add a placeholder message to the chat
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        id: placeholderId,  // Unique ID for placeholder
-        sender: 'AI',
-        text: 'Fetching...',
-        timestamp: new Date(),
-        likes: 0,
-      },
-    ]);
-  
-    try {
-      // Make the API call to get the AI response
-      const response = await fetch('http://localhost:3030/askAi', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const data = await response.json();
-      const aiResponseText = data.response; // Assuming the response has a 'response' field
-  
-      // Replace the placeholder message with the actual AI response
-      setMessages((prevMessages) => {
-        return prevMessages.map((msg) => {
-          if (msg.id === placeholderId) {
-            return {
-              ...msg,
-              text: aiResponseText, // Update with the actual AI response
-            };
-          }
-          return msg;
-        });
-      });
-    } catch (error) {
-      console.error('Error fetching AI response:', error);
-      // Replace the placeholder message with an error message
-      setMessages((prevMessages) => {
-        return prevMessages.map((msg) => {
-          if (msg.id === placeholderId) {
-            return {
-              ...msg,
-              text: 'Oops! Something went wrong. Please try again later. 🌟💬✨',
-            };
-          }
-          return msg;
-        });
-      });
-    }
   };
   
 
@@ -259,14 +159,14 @@ function Community() {
               key={index}
               className={`my-2 flex ${msg.sender === currentUser?.uid ? 'justify-end' : 'justify-start'}`}
             >
+            
               <div className="relative max-w-md">
                 <div
-                  className={`flex flex-col justify-between p-2 rounded-md max-w-md text-[#fff] ${
-                    msg.sender === currentUser?.uid ? 'bg-violet-200 text-[black] text-[12px]' : 'bg-gray-100 text-[12px] text-[black]'//User-Left-Right
-                  }`}
+                className={`p-3 rounded-lg max-w-md ${
+                  msg.sender === currentUser?.uid ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'
+                }`}
                 >
-
-              
+                              
                 <div className="self-end text-[8px] italic mt-2">
                   {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
                 </div>
@@ -297,7 +197,7 @@ function Community() {
                 <div className="flex space-x-2 mt-1 text-[10px] dark:bg-gray-800">
                   {msg.sender !== 'ai' && (
                     <>
-                      <button onClick={() => handleLike(index)} className="dark:text-white text-black flex items-center space-x-1">
+                      <button onClick={() => handleLikeMessage(index)} className="dark:text-white text-black flex items-center space-x-1">
                         {likedMessages.has(index)} <FaThumbsUp className="text-xs" /> <span>{msg.likes}</span>
                       </button>
                       <button onClick={() => handleCopy(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
@@ -312,7 +212,7 @@ function Community() {
                       <button onClick={() => handleReply(msg)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaReply className="text-xs" />
                       </button>
-                      <button onClick={() => requestAiResponse(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
+                      <button onClick={() => handleAiResponse(msg.text)} className="dark:text-white text-black flex items-center space-x-1">
                         <FaRobot className="text-xs" />
                         <span>Ask AI</span>
                       </button>
@@ -323,7 +223,7 @@ function Community() {
             </div>
           ))}
           {typingUser && (
-            <div className="text-[#fff] mt-2 italic">
+            <div className="text-[#fff] text-[10px] italic">
               {typingUser} is typing...
             </div>
           )}
@@ -333,7 +233,7 @@ function Community() {
         <input
           type="text"
           value={input}
-          onChange={handleTyping}
+          onChange={handleTypingChange}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -343,7 +243,7 @@ function Community() {
           placeholder="Type your message..."
           className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md"
         />
-        <button onClick={sendMessage} className="ml-1 px-3 py-2.5 dark:bg-white bg-violet-200 text-violet-800 rounded-md flex items-center"
+        <button onClick={handleSendMessage} className="ml-1 px-3 py-2.5 dark:bg-white bg-violet-200 text-violet-800 rounded-md flex items-center"
         >
           <FaPaperPlane className="text-violet-800" />
           <span className="ml-1 text-[12px]">Send</span>
