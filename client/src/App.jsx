@@ -21,6 +21,7 @@ import NotificationsPage from './projectmodules/Settings/NotificationsPage';
 import EmergencyPage from './projectmodules/Emergency/EmergencyPage';
 import Landing from './projectmodules/Landing/Landing';
 import NotFoundPage from './projectmodules/NotFound/NotFoundPage'; // Import a NotFound page
+import Onboarding from './projectmodules/SignUp/onboarding';
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/SignUp" element={<SignUpPage />} />
         <Route path="/SignIn" element={<SignInPage />} />
         <Route path="/ForgotPassword" element={<ForgotPasswordPage />} />
+        <Route path="/Onboarding" element={<Onboarding />} />
         <Route path="/Dashboard" element={
           <ProtectedRoute>
             <Dashboard />

@@ -1,94 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { ref, set, onValue } from 'firebase/database';
-import { realtimeDb } from '../Auth/firebase-config'; // Import your Realtime Database configuration
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import EditEmergencyContact from './EditEmergencyContact'; // Import the EditEmergencyContact component
+// src/components/ShowEmergencyContact.js
+import React, { useEffect, useState } from 'react';
+import { fetchEmergencyContacts } from './firebaseService'; // Import the service
+import EditEmergencyContacts from './EditEmergencyContact';
 
 function ShowEmergencyContact() {
-  const [contacts, setContacts] = useState([]);
-  const [newContact, setNewContact] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    relationship: '',
-    notes: '',
-  });
-  const [editingContactId, setEditingContactId] = useState(null);
-  const [isContactsVisible, setIsContactsVisible] = useState(true); // New state for collapse/expand
+  const [loading, setLoading] = useState(true);
+  const [selectedContact, setSelectedContact] = useState(null); // For storing selected contact to edit
+  
+  const [editing, setEditing] = useState(false); // Toggle edit mode
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const relationships = ['Family', 'Friend', 'Doctor', 'Other'];
-
-  // Fetch contacts from Realtime Database
+  // Fetch the emergency contacts from Firestore
   useEffect(() => {
-    const contactsRef = ref(realtimeDb, 'emergencyContacts');
-    const unsubscribe = onValue(contactsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const contactsList = Object.entries(data).map(([id, contact]) => ({
-          id,
-          ...contact
-        }));
-        setContacts(contactsList);
-      } else {
-        setContacts([]);
-      }
-    }, (error) => {
-      console.error('Error fetching contacts:', error);
-      toast.error('Failed to fetch contacts');
+    const unsubscribe = fetchEmergencyContacts((contactList) => {
+      setContacts(contactList);
+      setLoading(false);
     });
 
-    // Cleanup subscription on unmount
+    // Cleanup subscription on component unmount
     return () => unsubscribe();
   }, []);
 
-  return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <div className="p-3 flex flex-col flex-1 relative">
-      <h2 className="font-semibold text-gray-800 dark:text-gray-100">Your Saved Emergency Contacts</h2>
-      <div className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">
-        {isContactsVisible && (
-          <ul className="list-disc pl-5">
-            {contacts.map((contact) => (
-              <li key={contact.id} className="mb-2">
-                <div>
-                  <strong>Name:</strong> {contact.name}
-                </div>
-                <div>
-                  <strong>Phone:</strong> {contact.phone}
-                </div>
-                <div>
-                  <strong>Email Address:</strong> {contact.email}
-                </div>
-                <div>
-                  <strong>Relationship:</strong> {contact.relationship}
-                </div>
-                <div>
-                  <strong>Notes:</strong> {contact.notes}
-                </div>
-                <button
-                  className="px-3 py-2 dark:bg-white bg-violet-200 text-[13px] text-violet-800 rounded-md flex items-center"
-                  onClick={() => setEditingContactId(contact.id)}
-                >
-                  Edit
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
 
-      {editingContactId && (
+  // // Close the editing modal
+  // const handleCloseEdit = () => {
+  //   setEditing(false);
+  //   setSelectedContact(null);
+  // };
+
+  // Open the modal with a specific contact
+  const handleOpenModal = (contact) => {
+    setSelectedContact(contact);
+    setIsModalOpen(true);
+  };
+
+  // Close the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedContact(null);
+  };
+
+  // Fetch a list of contacts and render buttons to open the modal
+  // Replace this with actual logic for fetching and displaying contacts
+  const [contacts, setContacts] = useState([]);
+  React.useEffect(() => {
+    const unsubscribe = fetchEmergencyContacts((contactList) => {
+      setContacts(contactList);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <p>Loading contacts...</p>;
+  }
+
+  return (
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl p-3">
+      <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Saved Emergency Contacts</h2>
+      
+      <ul className="space-y-4">
+        {contacts.map((contact) => (
+          <li key={contact.id} className="p-4 bg-gray-100 dark:bg-gray-700 rounded-md shadow-sm">
+            <h3 className="font-bold text-gray-800 dark:text-gray-100">{contact.name}</h3>
+            <p className="text-gray-700 dark:text-gray-300">Phone: {contact.phone}</p>
+            <p className="text-gray-700 dark:text-gray-300">Email: {contact.email}</p>
+            <p className="text-gray-700 dark:text-gray-300">Relationship: {contact.relationship}</p>
+            {contact.notes && (
+              <p className="text-gray-700 dark:text-gray-300">Notes: {contact.notes}</p>
+            )}
+
+
+            {/* Edit Button */}
+            <button
+              className="mt-2 text-sm bg-blue-600 text-white p-2 rounded hover:bg-blue-500 transition duration-300"
+              onClick={() => handleOpenModal(contact)}
+            >
+              Edit
+            </button>  
+            <EditEmergencyContacts isOpen={isModalOpen} onClose={handleCloseModal} contact={selectedContact}/>
+          </li>
+        ))}
+      </ul>
+
+      {/* Conditionally render the EditEmergencyContact component */}
+      {editing && selectedContact && (
         <EditEmergencyContact
-          contactId={editingContactId}
-          onClose={() => setEditingContactId(null)}
-          onSave={() => toast.success('Contact updated successfully!')} // Ensure toast appears after successful edit
+          contact={selectedContact}
+          onClose={handleCloseEdit}
         />
       )}
-
-      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
     </div>
-  </div>
   );
 }
 

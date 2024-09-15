@@ -200,9 +200,9 @@ function Community() {
     });
   };
   
-
+  
   return (
-    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl h-screen max-h-[85vh] flex flex-col"> {/* Max height set to 85% of viewport */}
       <div className="p-3 flex flex-col flex-1 relative">
         <h2 className="font-semibold text-gray-800 dark:text-gray-100">Community</h2>
         
@@ -212,16 +212,18 @@ function Community() {
             className={`my-2 flex ${msg.sender === currentUser?.uid ? 'justify-end' : 'justify-start'}`}
           >
             <div className="relative max-w-xl w-full">
-              <div className="p-4 bg-white dark:bg-gray-900 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+              {/* <div className="p-4 bg-white dark:bg-gray-900 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700"> */}
+              <div className={`p-4 rounded-2xl shadow-md ${msg.sender === currentUser?.uid ? 'bg-gray-100 text-[12px] text-black' : 'bg-violet-200 text-black text-[12px]'}`}>
+
                 
                 
                 {/* Sender info */}
                 <div className="flex items-center justify-between">
-                  <div className="font-semibold text-gray-900 dark:text-gray-100">
-                    {msg.sender === currentUser?.uid ? 'You' : userEmails[msg.sender] || 'User'} {/* Display userName or 'User' */}
+                  <div className="font-semibold">
+                    {msg.sender === currentUser?.uid ? 'You' : userEmails[msg.sender] || 'User'}
                   </div>
 
-                  <div className="text-xs text-gray-500">
+                  <div className="text-[10px]">
                     {new Date(msg.timestamp).toLocaleTimeString()} - {new Date(msg.timestamp).toLocaleDateString()}
                   </div>
                 </div>
@@ -229,11 +231,11 @@ function Community() {
                 
                 {/* Message content */}
                 {collapsedMessages.has(index) && msg.sender === 'ai' ? (
-                  <button onClick={() => toggleCollapse(index)} className="text-xs text-blue-500 mt-2">
+                  <button onClick={() => toggleCollapse(index)} className="text-xs mt-2">
                     Expand AI response
                   </button>
                 ) : (
-                  <p className="text-gray-800 dark:text-gray-300 mt-2">
+                  <p className="mt-2">
                     {msg.text}
                     {msg.sender === 'ai' && (
                       <button onClick={() => toggleCollapse(index)} className="text-xs text-blue-500 ml-2">
@@ -257,8 +259,8 @@ function Community() {
                   {/* Logic for like button */}
                  
                   <button onClick={() => {handleLike(msg.id, setLikes);setUserHasLiked(!userHasLiked);}} className={`text-sm ${userHasLiked ? 'text-blue-600 dark:text-blue-400' : 'text-blue-500 dark:text-blue-300'} flex items-center`}>
-                    <FaThumbsUp className={`text-xs ${userHasLiked ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-300'}`}/>
-                    <span className="ml-2 text-gray-700 dark:text-gray-400">
+                    <FaThumbsUp className={`text-xs ${userHasLiked ? 'text-blue-600 dark:text-blue-400' : 'text-black dark:text-black'}`}/>
+                    <span className="ml-2 text-black">
                       {msg.likes} {msg.likes === 1 ? 'Like' : 'Likes'}
                     </span>
                   </button>
@@ -266,32 +268,32 @@ function Community() {
 
                   {/* Logic for Copy button */}
                   <button onClick={() => handleCopy(msg.text)} className="flex items-center space-x-1">
-                    <FaCopy className="text-xs" />
+                    <FaCopy className="text-xs text-black" />
                   </button>
 
 
                   {/* Logic for Download button */}
                   <button onClick={() => handleDownload(msg.text)} className="flex items-center space-x-1">
-                    <FaDownload className="text-xs" />
+                    <FaDownload className="text-xs text-black" />
                   </button>
 
 
                   {/* Logic for Share button */}
                   <button onClick={() => handleShare(msg.text)} className="flex items-center space-x-1">
-                    <FaShareAlt className="text-xs" />
+                    <FaShareAlt className="text-xs text-black" />
                   </button>
 
 
                   {/* Logic for Reply Button */}
-                  <button onClick={() => handleReply(msg)} className="flex items-center space-x-1">
-                    <FaReply className="text-xs" />
+                  <button onClick={() => handleReply(msg)} className="text-black flex items-center space-x-1">
+                    <FaReply className="text-xs text-black" />
                     <span>Reply</span>
                   </button>
 
 
                   {/* Logic for AskAi Button */}
-                  <button onClick={() => handleAiResponse(msg.text)} className="flex items-center space-x-1">
-                    <FaRobot className="text-xs" />
+                  <button onClick={() => handleAiResponse(msg.text)} className="text-black flex items-center space-x-1">
+                    <FaRobot className="text-xs text-black" />
                     <span>Ask AI</span>
                   </button>
 

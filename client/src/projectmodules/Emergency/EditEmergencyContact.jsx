@@ -1,168 +1,136 @@
 import React, { useState, useEffect } from 'react';
-import { ref, set, remove, onValue } from 'firebase/database';
-import { realtimeDb } from '../Auth/firebase-config'; // Import your Realtime Database configuration
+import { updateContact, deleteContact } from './firebaseService'; // Adjust the import path as needed
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function EditEmergencyContact({ contactId, onClose }) {
-  const [contact, setContact] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    relationship: '',
-    notes: '',
-  });
+function EditEmergencyContacts({ isOpen, onClose, contact }) {
+  const [editedContact, setEditedContact] = useState(null);
 
-  const relationships = ['Family', 'Friend', 'Doctor', 'Other'];
-
+  // Initialize or reset the editedContact state when the contact prop changes
   useEffect(() => {
-    // Fetch contact details
-    const contactRef = ref(realtimeDb, `emergencyContacts/${contactId}`);
-    const unsubscribe = onValue(contactRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setContact(data);
-      }
-    }, (error) => {
-      console.error('Error fetching contact:', error);
-      toast.error('Failed to fetch contact details');
-    });
+    if (contact) {
+      setEditedContact(contact);
+    }
+  }, [contact]);
 
-    // Cleanup listener on unmount
-    return () => unsubscribe();
-  }, [contactId]);
+  // Handle editing a contact's details
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditedContact({ ...editedContact, [name]: value });
+  };
 
-  // Save changes
-  const saveChanges = async () => {
-    if (contact.name && contact.phone && contact.email) {
+  // Save changes to the contact
+  const handleSaveClick = async () => {
+    if (editedContact) {
       try {
-        const contactRef = ref(realtimeDb, `emergencyContacts/${contactId}`);
-        await set(contactRef, contact);
+        await updateContact(editedContact.id, editedContact);
         toast.success('Contact updated successfully!');
-        onClose(); // Close the edit modal
+        onClose(); // Close the modal on success
       } catch (error) {
         console.error('Error updating contact:', error);
         toast.error('Failed to update contact');
       }
-    } else {
-      toast.warn('Name, Email and Phone Number are required');
     }
   };
 
-  // Delete contact
-  const deleteContact = async () => {
-    try {
-      const contactRef = ref(realtimeDb, `emergencyContacts/${contactId}`);
-      await remove(contactRef);
-      toast.success('Contact deleted successfully!');
-      onClose(); // Close the edit modal
-    } catch (error) {
-      console.error('Error deleting contact:', error);
-      toast.error('Failed to delete contact');
+  // Delete the contact
+  const handleDeleteClick = async () => {
+    if (editedContact) {
+      try {
+        await deleteContact(editedContact.id);
+        toast.success('Contact deleted successfully!');
+        onClose(); // Close the modal on success
+      } catch (error) {
+        console.error('Error deleting contact:', error);
+        toast.error('Failed to delete contact');
+      }
     }
   };
+
+  if (!isOpen || !editedContact) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center dark:bg-gray-800 dark:bg-opacity-30 bg-gray-800 bg-opacity-30 z-50">
-      <div className="dark:bg-gray-700 bg-gray-200 p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">Edit Contact</h2>
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 w-full max-w-md relative">
+        <button
+          className="absolute top-2 right-2 text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+          onClick={onClose}
+        >
+          &times;
+        </button>
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Edit Emergency Contact</h2>
 
-        <div className="mb-4">
-          <label className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">Name</label>
-          <div
-            contentEditable
-            className="text-[10px] text-gray-800 dark:text-gray-200 flex-1 p-2 border dark:border-gray-200 border-gray-800 rounded-md w-full"
-            suppressContentEditableWarning
-            onBlur={(e) => setContact({ ...contact, name: e.target.textContent })}
-          >
-            {contact.name}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">Phone Number</label>
-          <div
-            contentEditable
-            className="text-[10px] text-gray-800 dark:text-gray-200 flex-1 p-2 border dark:border-gray-200 border-gray-800 rounded-md w-full"
-            suppressContentEditableWarning
-            onBlur={(e) => setContact({ ...contact, phone: e.target.textContent })}
-          >
-            {contact.phone}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">Email Address</label>
-          <div
-            contentEditable
-            className="text-[10px] text-gray-800 dark:text-gray-200 flex-1 p-2 border dark:border-gray-200 border-gray-800 rounded-md w-full"
-            suppressContentEditableWarning
-            onBlur={(e) => setContact({ ...contact, email: e.target.textContent })}
-          >
-            {contact.email}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">Relationship</label>
-          <div
-            className="text-[10px] text-gray-800 dark:text-gray-200 flex-1 p-2 border dark:border-gray-200 border-gray-800 rounded-md w-full"
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={(e) => setContact({ ...contact, relationship: e.target.textContent })}
-          >
-            {contact.relationship || 'Select Relationship'}
-          </div>
-          <div className="mt-2">
-            {relationships.map((rel) => (
-              <button
-                key={rel}
-                className="text-sm dark:bg-gray-500 bg-gray-800 text-gray-200 dark:text-white p-2 rounded dark:hover:bg-gray-400 dark:hover:text-gray-200 hover:bg-gray-400 hover:text-gray-800 transition duration-300 ml-3"
-                onClick={() => setContact({ ...contact, relationship: rel })}
-              >
-                {rel}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="text-gray-800 dark:text-gray-100 mb-4 text-[12px]">Notes</label>
-          <div
-            contentEditable
-            className="text-[10px] text-gray-800 dark:text-gray-200 flex-1 p-2 border dark:border-gray-200 border-gray-800 rounded-md w-full"
-            suppressContentEditableWarning
-            onBlur={(e) => setContact({ ...contact, notes: e.target.textContent })}
-          >
-            {contact.notes}
-          </div>
-        </div>
-
-        <div className="mt-4 flex justify-end">
+        <input
+          type="text"
+          name="name"
+          value={editedContact.name || ''}
+          onChange={handleEditChange}
+          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+          placeholder="Name"
+        />
+        <input
+          type="tel"
+          name="phone"
+          value={editedContact.phone || ''}
+          onChange={handleEditChange}
+          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+          placeholder="Phone"
+        />
+        <input
+          type="email"
+          name="email"
+          value={editedContact.email || ''}
+          onChange={handleEditChange}
+          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+          placeholder="Email"
+        />
+        <select
+          name="relationship"
+          value={editedContact.relationship || ''}
+          onChange={handleEditChange}
+          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+        >
+          <option value="">Select Relationship</option>
+          {['Family', 'Friend', 'Doctor', 'Other'].map((rel) => (
+            <option key={rel} value={rel}>
+              {rel}
+            </option>
+          ))}
+        </select>
+        <textarea
+          name="notes"
+          value={editedContact.notes || ''}
+          onChange={handleEditChange}
+          className="w-full p-2 border border-gray-300 rounded-md mb-2"
+          placeholder="Notes"
+        />
+        <div className="flex justify-between mt-2">
           <button
-                className="text-sm dark:bg-gray-500 bg-gray-800 dark:text-white text-gray-200 p-2 rounded dark:hover:bg-gray-400 dark:hover:text-gray-200 transition hover:bg-gray-400 hover:text-gray-800 duration-300 ml-3"
-                onClick={saveChanges}
+            className="text-sm bg-green-600 text-white p-2 rounded hover:bg-green-500 transition duration-300"
+            onClick={handleSaveClick}
           >
             Save
           </button>
           <button
-                className="text-sm dark:bg-red-800 bg-red-800 dark:text-white text-gray-200 p-2 rounded dark:hover:bg-gray-100 dark:hover:text-red-800 hover:bg-red-200 hover:text-red-900 transition duration-300 ml-3"
-                onClick={deleteContact}
+            className="text-sm bg-red-600 text-white p-2 rounded hover:bg-red-500 transition duration-300"
+            onClick={handleDeleteClick}
           >
             Delete
           </button>
-          <button
-                className="text-sm dark:bg-gray-800 bg-gray-500 dark:text-white text-gray-200 p-2 rounded dark:hover:bg-gray-200 dark:hover:text-gray-800 hover:bg-gray-800 transition duration-300 ml-3"
-                onClick={onClose}
-          >
-            Cancel
-          </button>
         </div>
-        
-        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );
 }
 
-export default EditEmergencyContact;
+export default EditEmergencyContacts;

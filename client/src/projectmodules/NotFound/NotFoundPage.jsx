@@ -31,7 +31,7 @@ const NotFoundPage = () => {
           404
         </h1>
         <p className="font-semibold text-gray-800 dark:text-gray-100 text-[30px] mb-4">
-          Oops! The page you’re looking for doesn’t exist.
+          Oops! Looks like you found a page that doesn’t exist or you don't have access to.
         </p>
         <button
           onClick={handleGoHome}
