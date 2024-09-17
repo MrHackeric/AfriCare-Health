@@ -14,7 +14,6 @@ export function initFirebase(__dirname) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
-
     isFirebaseInitialized = true;
     console.log('Firebase has been initialized successfully.');
   }
@@ -27,3 +26,9 @@ export const getFirestore = () => {
   }
   return admin.firestore();
 };
+
+export default initFirebase;
+
+
+
+

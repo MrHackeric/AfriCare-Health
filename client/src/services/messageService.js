@@ -1,11 +1,11 @@
-import { auth, db } from '../Auth/firebase-config'; // Adjust the path as needed
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { auth, db } from '../projectmodules/Auth/firebase-config'; // Adjust the path as needed
+import { collection, query, addDoc, serverTimestamp, orderBy, onSnapshot, doc, updateDoc, increment, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 
-
+//FOR COMMUNITY MODULE
 // Fetch messages from Firestore along with their likes count
 export const fetchMessages = async (setMessages) => {
   if (typeof setMessages !== 'function') {
-    console.error('setMessages is not a valid function');
+    // console.error('setMessages is not a valid function');
     return;
   }
 
@@ -108,64 +108,7 @@ export const fetchUserLikes = async (messageId, setLikes) => {
     const userLikeDoc = await getDoc(userLikeRef);
     return userLikeDoc.exists(); // Return true if user has liked the message
   } catch (error) {
-    console.error('Error fetching user like status:', error);
+    // console.error('Error fetching user like status:', error);
     return false;
   }
 };
-
-
-// // Function to handle liking a message
-// export const handleLike = async (messageId, setLikes) => {
-//   try {
-//     // Reference to the message document
-//     const messageRef = doc(db, 'messages', messageId);
-    
-//     // Get the current document to update the likes count
-//     const messageDoc = await getDoc(messageRef);
-
-//     if (messageDoc.exists()) {
-//       const currentLikes = messageDoc.data().likes || 0;
-
-//       // Update the likes count (increment by 1)
-//       await updateDoc(messageRef, {
-//         likes: increment(1),
-//       });
-
-//       // Update likes state in the frontend
-//       setLikes((prevLikes) => ({
-//         ...prevLikes,
-//         [messageId]: currentLikes + 1,
-//       }));
-//     }
-//   } catch (error) {
-//     console.error("Error liking the message:", error);
-//   }
-// };
-
-
-// // Function to handle unliking a message (optional)
-// export const handleUnlike = async (messageId, setLikes) => {
-//   try {
-//     const messageRef = doc(db, 'messages', messageId);
-//     const messageDoc = await getDoc(messageRef);
-
-//     if (messageDoc.exists()) {
-//       const currentLikes = messageDoc.data().likes || 0;
-
-//       // Ensure likes don't go below 0
-//       if (currentLikes > 0) {
-//         await updateDoc(messageRef, {
-//           likes: increment(-1),
-//         });
-
-//         // Update likes state in the frontend
-//         setLikes((prevLikes) => ({
-//           ...prevLikes,
-//           [messageId]: currentLikes - 1,
-//         }));
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error unliking the message:", error);
-//   }
-// };

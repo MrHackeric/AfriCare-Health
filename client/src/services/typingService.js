@@ -1,4 +1,4 @@
-import { fetchUserName } from './userService'; // Adjust path to your userService file
+import { fetchUserEmail } from './userService'; // Adjust path to your userService file
 import { useEffect } from 'react';
 
 // Handle typing events
@@ -11,7 +11,7 @@ export const handleTyping = async (e, socket, currentUser, setInput, setTypingUs
   if (!typingUser && currentUser?.uid) {
     try {
       // Fetch the user's email
-      const email = await fetchUserName(currentUser.uid);
+      const email = await fetchUserEmail(currentUser.uid);
       typingUser = email || 'Unknown User';
       setTypingUser(typingUser);
     } catch (error) {

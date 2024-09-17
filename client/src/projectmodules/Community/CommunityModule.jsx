@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { socket, aiSocket } from './socket';
-import { fetchMessages, sendMessage, handleLike, fetchUserLikes } from './messageService';
-import { requestAiResponse } from './aiService';
-import { fetchUserName } from './userService';
-import { FaThumbsUp, FaCopy, FaPaperPlane, FaDownload, FaShareAlt, FaReply, FaEllipsisV, FaRobot } from 'react-icons/fa';
+import { fetchMessages, sendMessage, handleLike, fetchUserLikes } from '../../services/messageService';
+import { requestAiResponse } from '../../services/aiService';
+import { fetchUserEmail } from '../../services/userService';
+import { FaThumbsUp, FaCopy, FaPaperPlane, FaDownload, FaShareAlt, FaReply, FaRobot } from 'react-icons/fa';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { handleTyping, useTypingNotifications } from './typingService';
+import { handleTyping, useTypingNotifications } from '../../services/typingService';
+import { handleCopyMessage, handleDownloadMessage, handleShareMessage } from '../../utils/messageUtils';
 
 function Community() {
   const [messages, setMessages] = useState([]);
@@ -16,38 +17,35 @@ function Community() {
   const [collapsedMessages, setCollapsedMessages] = useState(new Set()); // State for collapsed messages
   const [userEmails, setUserEmails] = useState({}); // Store emails here
   const [likes, setLikes] = useState({}); // State to track likes
-    
-  
   const messagesEndRef = useRef(null);
   const auth = getAuth();
   const dropdownRef = useRef(null);
-
   const [userHasLiked, setUserHasLiked] = useState(false);
   
 
   //Logic to load like status
-  useEffect(() => {
-    if (messages.length > 0) {
-      const fetchLikeStatuses = async () => {
-        const likeStatuses = await Promise.all(messages.map(async (msg) => {
-          const hasLiked = await fetchUserLikes(msg.id);
-          return { id: msg.id, hasLiked };
-        }));
-        // Set the userLikes state based on the fetched statuses
-        setUserLikes(likeStatuses.reduce((acc, { id, hasLiked }) => {
-          acc[id] = hasLiked;
-          return acc;
-        }, {}));
-      };
-      fetchLikeStatuses();
-    }
-  }, [messages, currentUser]);
+  // useEffect(() => {
+  //   if (messages.length > 0) {
+  //     const fetchLikeStatuses = async () => {
+  //       const likeStatuses = await Promise.all(messages.map(async (msg) => {
+  //         const hasLiked = await fetchUserLikes(msg.id);
+  //         return { id: msg.id, hasLiked };
+  //       }));
+  //       // Set the userLikes state based on the fetched statuses
+  //       setUserLikes(likeStatuses.reduce((acc, { id, hasLiked }) => {
+  //         acc[id] = hasLiked;
+  //         return acc;
+  //       }, {}));
+  //     };
+  //     fetchLikeStatuses();
+  //   }
+  // }, [messages, currentUser]);
 
 
   //Logic to load email for use in the UI to know all users when they send messages
   const getUserEmail = async (userId) => {
     if (!userEmails[userId]) { // Check if email is already fetched
-      const email = await fetchUserName(userId);
+      const email = await fetchUserEmail(userId);
       setUserEmails((prevEmails) => ({ ...prevEmails, [userId]: email }));
     }
   };
@@ -69,7 +67,7 @@ function Community() {
       const emailMap = {};
       for (const msg of messages) {
         if (!emailMap[msg.sender]) {
-          const email = await fetchUserName(msg.sender); // Fetch email based on UID
+          const email = await fetchUserEmail(msg.sender); // Fetch email based on UID
           if (email) {
             emailMap[msg.sender] = email;
           }
@@ -89,7 +87,7 @@ function Community() {
 
   // Function to Reply to Messages
   const handleReply = async (message) => {
-    const senderEmail = await fetchUserName(message.sender);
+    const senderEmail = await fetchUserEmail(message.sender);
     if (senderEmail) {
       setReplyTo(message);
       setInput(`@${senderEmail}: `);
@@ -128,8 +126,12 @@ function Community() {
 
 
   // Function to handle AI response request
-  const handleAiResponse = (text) => {
-    requestAiResponse(text, setMessages); // Trigger AI response
+  const handleAiResponse = async (text) => {
+    try {
+      await requestAiResponse(text, setMessages); // Trigger AI response
+    } catch (error) {
+      console.error('Error handling AI response:', error);
+    }
   };
 
 
@@ -147,41 +149,21 @@ function Community() {
 
   // Hook to manage typing notifications
   useTypingNotifications(socket, currentUser, typingUser, setTypingUser);
-
-
-  //Logic to handle copying of texts
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text).then(() => alert('Message copied!'));
+  
+  //Logic to Copy messages
+  const handleCopy = (message) => {
+    handleCopyMessage(message.text);
   };
 
-
-  //Logic to handle downloading texts
-  const handleDownload = (text) => {
-    const element = document.createElement('a');
-    const file = new Blob([text], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = 'message.txt';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+  //Logic to Download messages
+  const handleDownload = (message) => {
+    handleDownloadMessage(message.text);
   };
 
-
-  //Logic to handle sharing of messages
-  const handleShare = (text) => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: 'Africare Message',
-          text: text,
-        })
-        .then(() => console.log('Message shared!'))
-        .catch((error) => console.error('Error sharing', error));
-    } else {
-      alert('Share feature is not supported on your device.');
-    }
+  //Logic to Share messages
+  const handleShare = (message) => {
+    handleShareMessage(message.text);
   };
-
 
   const toggleDropdown = (index) => {
     setDropdownIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -267,19 +249,20 @@ function Community() {
 
 
                   {/* Logic for Copy button */}
-                  <button onClick={() => handleCopy(msg.text)} className="flex items-center space-x-1">
+                  <button onClick={() => handleCopy(msg)} className="flex items-center space-x-1">
                     <FaCopy className="text-xs text-black" />
                   </button>
 
 
                   {/* Logic for Download button */}
-                  <button onClick={() => handleDownload(msg.text)} className="flex items-center space-x-1">
+                  <button onClick={() => handleDownload(msg)} className="flex items-center space-x-1">
                     <FaDownload className="text-xs text-black" />
                   </button>
 
 
+
                   {/* Logic for Share button */}
-                  <button onClick={() => handleShare(msg.text)} className="flex items-center space-x-1">
+                  <button onClick={() => handleShare(msg)} className="flex items-center space-x-1">
                     <FaShareAlt className="text-xs text-black" />
                   </button>
 
