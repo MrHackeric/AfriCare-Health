@@ -19,7 +19,7 @@ function ForgotPasswordPage() {
       navigate('/SignIn');
       return;
     }
-    
+
     const timer = setInterval(() => {
       setCountdown((prev) => prev - 1);
     }, 1000);
@@ -31,7 +31,7 @@ function ForgotPasswordPage() {
     try {
       await sendPasswordResetEmail(auth, values.email);
       setStatus({ success: "Password reset email sent! Please check your inbox." });
-      
+
       // Start countdown after successful email sent
       setCountdown(10);
     } catch (error) {
@@ -43,10 +43,10 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-md w-full">
-        <header className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center">
+    <div className="bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 min-h-screen flex items-center justify-center">
+      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+        <header className="mb-6 text-center">
+          <h2 className="text-2xl font-semibold text-gray-800">
             Forgot Password
           </h2>
         </header>
@@ -61,7 +61,7 @@ function ForgotPasswordPage() {
               <div className="mb-4">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  className="block text-sm font-medium text-pink-700"
                 >
                   Email
                 </label>
@@ -69,7 +69,7 @@ function ForgotPasswordPage() {
                   type="email"
                   name="email"
                   id="email"
-                  className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
+                  className="mt-1 p-3 w-full border-2 border-pink-700 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white text-gray-800"
                 />
                 <ErrorMessage
                   name="email"
@@ -80,7 +80,7 @@ function ForgotPasswordPage() {
               <div className="mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+                  className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition duration-300 w-full"
                   disabled={isSubmitting}
                 >
                   Send Password Reset Email
@@ -105,7 +105,7 @@ function ForgotPasswordPage() {
         <div className="mt-4 text-center">
           <a
             href="/SignIn"
-            className="text-sm text-blue-500 hover:underline"
+            className="text-sm text-pink-700 hover:underline"
           >
             Remembered your password? Sign In
           </a>
