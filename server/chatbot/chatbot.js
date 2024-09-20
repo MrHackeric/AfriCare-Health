@@ -116,4 +116,21 @@ router.post("/askAi", async (req, res) => {
   }
 });
 
+
+// RSS FEED FOR NEWS UPDATES
+router.post('/api/news', async (req, res) => {
+  try {
+    const response = await fetch('https://news.google.com/rss/search?q=maternal+health&hl=en-US&gl=US&ceid=US:en');
+    const text = await response.text();
+    
+    // You can process the RSS feed text here if needed, 
+    // or directly send it as the response.
+    
+    res.set('Content-Type', 'application/xml');
+    res.send(text);
+  } catch (error) {
+    res.status(500).send("Error fetching news");
+  }
+});
+
 export default router;
