@@ -14,10 +14,10 @@
 /.vite/deps
 
 # Ignore environment variable file in the server folder
-/server/.env
+.env
 
 # Ignore Firebase auth file
-/server/Auth/africare-health-app-firebase-adminsdk-fxdsl-c304604fa8.json
+/Auth/africare-health-app-firebase-adminsdk-fxdsl-c304604fa8.json
 
 # Ignore log files
 *.log
@@ -56,4 +56,3 @@ dist
 
 *.local
 .env
-src/projectmodules/
