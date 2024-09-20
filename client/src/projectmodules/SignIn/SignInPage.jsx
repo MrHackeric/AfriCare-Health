@@ -27,7 +27,7 @@ const SignInPage = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Redirect to /Community page
-      navigate('/Community');
+      navigate('/Dashboard');
     } catch (error) {
       console.error("Sign in error:", error);
       actions.setStatus({ error: "Failed to sign in. Please check your credentials and try again." });
