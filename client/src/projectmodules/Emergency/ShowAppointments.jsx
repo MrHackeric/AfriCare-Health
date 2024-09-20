@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { FaCalendarAlt } from 'react-icons/fa';
+import EditAppointmentForm from './EditAppointments'; // Adjust the import path as needed
 
 function ShowAppointments() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [editingAppointment, setEditingAppointment] = useState(null);
   const db = getFirestore();
 
   useEffect(() => {
@@ -24,6 +25,14 @@ function ShowAppointments() {
     fetchAppointments();
   }, [db]);
 
+  const handleEditClick = (appointment) => {
+    setEditingAppointment(appointment);
+  };
+
+  const handleCloseEditForm = () => {
+    setEditingAppointment(null);
+  };
+
   if (loading) {
     return <p>Loading appointments...</p>;
   }
@@ -38,11 +47,20 @@ function ShowAppointments() {
             <div>
               <p className="text-lg font-semibold">{appointment.doctor}</p>
               <p>{appointment.date} at {appointment.time}</p>
-              {appointment.notes && <p className="text-gray-600 dark:text-gray-400">{appointment.notes}</p>}
+              <button onClick={() => handleEditClick(appointment)} className="text-blue-500 hover:underline">
+                Reschedule
+              </button>
             </div>
           </li>
         ))}
       </ul>
+
+      {editingAppointment && (
+        <EditAppointmentForm
+          appointment={editingAppointment}
+          onClose={handleCloseEditForm}
+        />
+      )}
     </div>
   );
 }

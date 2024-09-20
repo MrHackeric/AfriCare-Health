@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-
 import Sidebar from '../../Header&Sidebar/Sidebar';
 import Header from '../../Header&Sidebar/Header';
-import Emergency from './Emergency'; // Assuming this is the form for adding emergency contacts
+import Emergency from './Emergency'; // Form for adding emergency contacts
 import ShowEmergencyContact from './ShowEmergencyContact'; // List of saved emergency contacts
 import SaveAppointment from './SaveAppointments'; // Form for saving new appointments
 import ShowAppointments from './ShowAppointments'; // List of saved appointments
 
 function EmergencyPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showEmergencyForm, setShowEmergencyForm] = useState(false);
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+
+  const handleEmergencyToggle = () => {
+    setShowEmergencyForm((prev) => !prev);
+  };
+
+  const handleAppointmentToggle = () => {
+    setShowAppointmentForm((prev) => !prev);
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900">
@@ -34,10 +43,19 @@ function EmergencyPage() {
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                   <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Emergency Contacts</h2>
 
-                  {/* Form to Save Emergency Contact */}
-                  <div className="mb-6">
-                    <Emergency />
-                  </div>
+                  {/* Button to Add Emergency Contact */}
+                  <button
+                    onClick={handleEmergencyToggle}
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 mb-4">
+                    {showEmergencyForm ? 'Cancel' : 'Add Emergency Contact'}
+                  </button>
+
+                  {/* Render Emergency Form if toggled */}
+                  {showEmergencyForm && (
+                    <div className="mb-6">
+                      <Emergency onClose={handleEmergencyToggle} />
+                    </div>
+                  )}
 
                   {/* Display List of Emergency Contacts */}
                   <ShowEmergencyContact />
@@ -49,10 +67,19 @@ function EmergencyPage() {
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                   <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Doctor Appointments</h2>
 
-                  {/* Form to Save Appointment */}
-                  <div className="mb-6">
-                    <SaveAppointment />
-                  </div>
+                  {/* Button to Add Appointment */}
+                  <button
+                    onClick={handleAppointmentToggle}
+                    className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 mb-4">
+                    {showAppointmentForm ? 'Cancel' : 'Add Appointment'}
+                  </button>
+
+                  {/* Render Appointment Form if toggled */}
+                  {showAppointmentForm && (
+                    <div className="mb-6">
+                      <SaveAppointment onClose={handleAppointmentToggle} />
+                    </div>
+                  )}
 
                   {/* Display List of Appointments */}
                   <ShowAppointments />
