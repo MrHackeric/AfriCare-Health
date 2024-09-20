@@ -4,8 +4,8 @@ import { FaRobot, FaUsers, FaAmbulance, FaHeartbeat } from 'react-icons/fa'; // 
 
 function QuickActions() {
     return (
-        <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6 mt-6">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Quick Actions</h2>
+        <div className="bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-sm rounded-xl p-6 mt-6">
+            <h2 className="text-xl font-semibold text-pink-800 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-4">
                 {/* AI Chatbot button with a link and icon */}
                 <Link to="/Chatbot" className="bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 flex items-center justify-center space-x-2">

@@ -135,9 +135,9 @@ function Community() {
   };
 
   return (
-    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl flex flex-col h-[90vh]">
-      <div className="p-3 flex flex-col flex-1 overflow-y-auto relative">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100 text-center mb-4">
+    <div className="col-span-full xl:col-span-12 bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-lg rounded-2xl flex flex-col h-[90vh]">
+      <div className="p-4 flex flex-col flex-1 overflow-y-auto relative">
+        <h2 className="font-semibold text-pink-600 text-center mb-4 text-2xl">
           Join the Conversation! Connect with the Community.
         </h2>
 
@@ -148,8 +148,7 @@ function Community() {
             className={`my-3 flex ${msg.sender === currentUser?.uid ? 'justify-end' : 'justify-start'}`}
           >
             <div className="relative max-w-lg w-full">
-              <div className={`p-4 rounded-3xl shadow-md transition-transform transform-gpu ${msg.sender === currentUser?.uid ? 'bg-gray-100 text-sm text-black' : 'bg-violet-200 text-sm text-black'}`}>
-                
+              <div className={`p-4 rounded-3xl shadow-lg transition-transform transform-gpu ${msg.sender === currentUser?.uid ? 'bg-white text-black' : 'bg-pink-200 text-black'}`}>
                 {/* Sender and timestamp */}
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-semibold">
@@ -161,63 +160,42 @@ function Community() {
                 </div>
 
                 {/* Message content */}
-                {collapsedMessages.has(index) && msg.sender === 'ai' ? (
-                  <button onClick={() => toggleCollapse(index)} className="text-xs mt-2">
-                    Expand AI response
-                  </button>
-                ) : (
-                  <p className="mt-2 break-words">
-                    {msg.text}
-                    {msg.sender === 'ai' && (
-                      <button onClick={() => toggleCollapse(index)} className="text-xs text-blue-500 ml-2">
-                        {collapsedMessages.has(index) ? 'Expand' : 'Collapse'}
-                      </button>
-                    )}
-                  </p>
-                )}
-
-                {/* Replying to another message */}
-                {msg.replyTo && (
-                  <div className="text-gray-500 mt-1 text-xs italic border-l-4 pl-2 border-blue-300">
-                    Replying to: {messages[msg.replyTo]?.text || 'Unknown message'}
-                  </div>
-                )}
+                <p className="mt-2 break-words">{msg.text}</p>
 
                 {/* Interaction buttons */}
                 <div className="flex justify-between mt-3 text-xs text-gray-800">
-                  
                   {/* Like button */}
-                  <button onClick={() => {handleLike(msg.id, setLikes);setUserHasLiked(!userHasLiked);}} className="flex items-center space-x-1 hover:text-blue-600">
-                    <FaThumbsUp className={`${userHasLiked ? 'text-blue-600' : ''}`} />
+                  <button onClick={() => handleLike(msg.id)} className="flex items-center space-x-1 text-pink-600 hover:text-pink-700">
+                    <FaThumbsUp />
                     <span>{msg.likes} {msg.likes === 1 ? 'Like' : 'Likes'}</span>
                   </button>
 
                   {/* Copy */}
-                  <button onClick={() => handleCopy(msg)} className="flex items-center space-x-1 hover:text-blue-600">
+                  <button onClick={() => handleCopy(msg)} className="flex items-center space-x-1 text-pink-600 hover:text-pink-700">
                     <FaCopy />
                     <span>Copy</span>
                   </button>
 
                   {/* Download */}
-                  <button onClick={() => handleDownload(msg)} className="flex items-center space-x-1 hover:text-blue-600">
+                  <button onClick={() => handleDownload(msg)} className="flex items-center space-x-1 text-pink-600 hover:text-pink-700">
                     <FaDownload />
                     <span>Download</span>
                   </button>
 
                   {/* Share */}
-                  <button onClick={() => handleShare(msg)} className="flex items-center space-x-1 hover:text-blue-600">
+                  <button onClick={() => handleShare(msg)} className="flex items-center space-x-1 text-pink-600 hover:text-pink-700">
                     <FaShareAlt />
                     <span>Share</span>
                   </button>
 
                   {/* Reply */}
-                  <button onClick={() => handleReply(msg)} className="flex items-center space-x-1 hover:text-blue-600">
+                  <button onClick={() => handleReply(msg)} className="flex items-center space-x-1 text-pink-600 hover:text-pink-700">
                     <FaReply />
                     <span>Reply</span>
                   </button>
 
                   {/* AI */}
-                  <button onClick={() => handleAiResponse(msg.text)} className="flex items-center space-x-1 hover:text-blue-600">
+                  <button onClick={() => handleAiResponse(msg.text)} className="flex items-center space-x-1 text-pink-600 hover:text-pink-700">
                     <FaRobot />
                     <span>Ask AI</span>
                   </button>
@@ -227,27 +205,21 @@ function Community() {
           </div>
         ))}
 
-        {/* Typing indicator */}
-        {typingUser && (
-          <div className="text-gray-500 italic text-xs mt-2">
-            {typingUser} is typing...
-          </div>
-        )}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input section */}
-      <div className="p-3 flex items-center border-t border-gray-200 dark:border-gray-600">
+      <div className="p-4 flex items-center border-t bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200rounded-b-2xl">
         <input
           type="text"
           value={input}
           onChange={handleTypingChange}
           placeholder="Type your message..."
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300"
         />
         <button
           onClick={handleSendMessage}
-          className="ml-3 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-all"
+          className="ml-3 px-4 py-2 text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition-all"
         >
           <FaPaperPlane className="mr-2" /> Send
         </button>

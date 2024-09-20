@@ -13,9 +13,6 @@ function Emergency() {
     relationship: '',
     notes: '',
   });
-  const [editingContactId, setEditingContactId] = useState(null);
-  const [isContactsVisible, setIsContactsVisible] = useState(true); // New state for collapse/expand
-
   const relationships = ['Family', 'Friend', 'Doctor', 'Other'];
 
   // Add a new contact to Firestore subcollection
@@ -30,70 +27,68 @@ function Emergency() {
   };
 
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <div className="p-3 flex flex-col flex-1 relative">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Emergency Contacts</h2>
+    <div className="col-span-full xl:col-span-6 bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-lg rounded-lg p-5">
+      <h2 className="font-semibold text-pink-600 text-lg text-center mb-4">Emergency Contacts</h2>
+      
+      <div className="mb-4">
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">Add New Contact</h3>
         
-        <div className="mb-4">
-          <h3 className="text-[12px] font-medium text-gray-800 dark:text-gray-100">Add New Contact</h3>
-          
-          <input
-            type="text"
-            placeholder="Name"
-            className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
-            value={newContact.name}
-            onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-          />
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
-            value={newContact.phone}
-            onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-          />
-          <input
-            type="email"
-            placeholder="Email Address"
-            className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
-            value={newContact.email}
-            onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-          />
-          <select
-            className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
-            value={newContact.relationship}
-            onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
-          >
-            <option value="">Select Relationship</option>
-            {relationships.map((rel) => (
-              <option key={rel} value={rel}>
-                {rel}
-              </option>
-            ))}
-          </select>
-          <textarea
-            placeholder="Notes"
-            className="text-gray-800 dark:text-gray-800 flex-1 p-2 border border-[gray] rounded-md text-sm w-full mt-2"
-            value={newContact.notes}
-            onChange={(e) => setNewContact({ ...newContact, notes: e.target.value })}
-          />
-          <button
-            className="ml-1 px-3 py-2.5 dark:bg-white bg-violet-200 text-[13px] text-violet-800 rounded-md flex items-center"
-            onClick={addContact}
-          >
-            Add Contact
-          </button>
-        </div>
-        
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          closeOnClick
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
+        <input
+          type="text"
+          placeholder="Name"
+          className="mt-2 text-gray-800 dark:text-gray-800 p-3 border border-pink-300 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+          value={newContact.name}
+          onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
         />
+        <input
+          type="tel"
+          placeholder="Phone Number"
+          className="mt-2 text-gray-800 dark:text-gray-800 p-3 border border-pink-300 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+          value={newContact.phone}
+          onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
+        />
+        <input
+          type="email"
+          placeholder="Email Address"
+          className="mt-2 text-gray-800 dark:text-gray-800 p-3 border border-pink-300 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+          value={newContact.email}
+          onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
+        />
+        <select
+          className="mt-2 text-gray-800 dark:text-gray-800 p-3 border border-pink-300 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+          value={newContact.relationship}
+          onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
+        >
+          <option value="">Select Relationship</option>
+          {relationships.map((rel) => (
+            <option key={rel} value={rel}>
+              {rel}
+            </option>
+          ))}
+        </select>
+        <textarea
+          placeholder="Notes"
+          className="mt-2 text-gray-800 dark:text-gray-800 p-3 border border-pink-300 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+          value={newContact.notes}
+          onChange={(e) => setNewContact({ ...newContact, notes: e.target.value })}
+        />
+        <button
+          className="mt-4 px-4 py-2 bg-pink-500 text-white rounded-lg shadow-md hover:bg-pink-600 transition duration-300"
+          onClick={addContact}
+        >
+          Add Contact
+        </button>
       </div>
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

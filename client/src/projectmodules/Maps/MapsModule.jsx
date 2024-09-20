@@ -237,9 +237,9 @@ function MapModule() {
   }, [apiKey, userLocation]);
 
   return (
-    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+    <div className="col-span-full xl:col-span-12 bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-sm rounded-xl">
       <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Map</h2>
+        <h2 className="font-semibold text-pink-800">Google Maps to find nearest Health Facilities</h2>
       </header>
       <div className="p-3 h-full relative">
         <div id="map" style={mapContainerStyle} ref={mapRef}></div>

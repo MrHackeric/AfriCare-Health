@@ -34,8 +34,8 @@ function UpcomingAppointments() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6 mt-6">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+    <div className="bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-sm rounded-xl p-6 mt-6">
+      <h2 className="text-xl font-semibold text-pink-800 mb-4">
         Upcoming Appointments
       </h2>
       <ul>
@@ -45,8 +45,8 @@ function UpcomingAppointments() {
               <div className="flex items-center">
                 <FaCalendarAlt className="text-2xl text-blue-500 mr-4" />
                 <div>
-                  <p className="text-lg font-bold">{appointment.date}</p>
-                  <p>{appointment.time} with {appointment.doctor}</p>
+                  <p className="text-lg font-bold text-pink-600">{appointment.date}</p>
+                  <p className='text-pink-600 italic text-[12px]'>{appointment.time} with {appointment.doctor}</p>
                 </div>
               </div>
               <button
@@ -58,7 +58,7 @@ function UpcomingAppointments() {
             </li>
           ))
         ) : (
-          <p className="text-gray-500">No upcoming appointments.</p>
+          <p className="text-pink-600">No upcoming appointments.</p>
         )}
       </ul>
 

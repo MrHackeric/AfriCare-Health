@@ -6,19 +6,15 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../Auth/firebase-config';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-
 import Sidebar from '../../Header&Sidebar/Sidebar';
 import Header from '../../Header&Sidebar/Header';
 
 const AccountDetailsPage = () => {
   const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState({
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
-    phoneNumber: '',
     gender: '',
-    username: '',
   });
   const [status, setStatus] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,16 +39,13 @@ const AccountDetailsPage = () => {
   }, []);
 
   const AccountDetailsSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name is required'),
-    lastName: Yup.string().required('Last name is required'),
+    fullName: Yup.string().required('Full name is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
     gender: Yup.string().required('Gender is required'),
-    username: Yup.string().required('Username is required'),
   });
 
   const handleFormSubmit = async (values, actions) => {
-    try { 
+    try {
       const user = auth.currentUser;
       if (user) {
         await updateDoc(doc(db, 'users', user.uid), values);
@@ -77,11 +70,12 @@ const AccountDetailsPage = () => {
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-              <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-2xl w-full">
-                <header className="mb-6">
-                  <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center">
-                    Account Details
+              <div className="bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-md rounded-lg p-8 max-w-lg w-full">
+                <header className="mb-6 text-center">
+                  <h2 className="text-3xl font-semibold text-pink-800">
+                    Account Settings
                   </h2>
+                  <p className="text-pink-600">Manage your account details</p>
                 </header>
                 <Formik
                   enableReinitialize
@@ -90,155 +84,94 @@ const AccountDetailsPage = () => {
                   onSubmit={handleFormSubmit}
                 >
                   {({ isSubmitting, setFieldValue }) => (
-                    <Form>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Form Fields */}
-                        <div>
-                          <label
-                            htmlFor="firstName"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                          >
-                            First Name
-                          </label>
-                          <Field
-                            type="text"
-                            name="firstName"
-                            id="firstName"
-                            placeholder="Enter your first name"
-                            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
-                          />
-                          <ErrorMessage
-                            name="firstName"
-                            component="div"
-                            className="text-red-500 text-sm mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="lastName"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                          >
-                            Last Name
-                          </label>
-                          <Field
-                            type="text"
-                            name="lastName"
-                            id="lastName"
-                            placeholder="Enter your last name"
-                            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
-                          />
-                          <ErrorMessage
-                            name="lastName"
-                            component="div"
-                            className="text-red-500 text-sm mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                          >
-                            Email
-                          </label>
-                          <Field
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="Enter your email"
-                            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
-                            disabled
-                          />
-                          <ErrorMessage
-                            name="email"
-                            component="div"
-                            className="text-red-500 text-sm mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="phoneNumber"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                          >
-                            Phone Number
-                          </label>
-                          <PhoneInput
-                            country={'us'}
-                            value={initialValues.phoneNumber}
-                            onChange={(phone) => setFieldValue('phoneNumber', phone)}
-                            inputProps={{
-                              name: 'phoneNumber',
-                              id: 'phoneNumber',
-                              className: 'mt-1 p-2 w-full border border-gray-200 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100',
-                            }}
-                          />
-                          <ErrorMessage
-                            name="phoneNumber"
-                            component="div"
-                            className="text-red-500 text-xs mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="gender"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                          >
-                            Gender
-                          </label>
-                          <Field
-                            as="select"
-                            name="gender"
-                            id="gender"
-                            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
-                          >
-                            <option value="" label="Select gender" />
-                            <option value="male" label="Male" />
-                            <option value="female" label="Female" />
-                            <option value="other" label="Other" />
-                          </Field>
-                          <ErrorMessage
-                            name="gender"
-                            component="div"
-                            className="text-red-500 text-sm mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="username"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                          >
-                            Username
-                          </label>
-                          <Field
-                            type="text"
-                            name="username"
-                            id="username"
-                            placeholder="Choose a username"
-                            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-gray-100"
-                          />
-                          <ErrorMessage
-                            name="username"
-                            component="div"
-                            className="text-red-500 text-sm mt-1"
-                          />
-                        </div>
+                    <Form className="space-y-6">
+                      {/* Full Name */}
+                      <div>
+                        <label
+                          htmlFor="fullName"
+                          className="block text-sm font-medium text-pink-600"
+                        >
+                          Full Name
+                        </label>
+                        <Field
+                          type="text"
+                          name="fullName"
+                          id="fullName"
+                          placeholder="Enter your full name"
+                          className="mt-1 block w-full px-3 py-2 border border-pink-900 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white text-pink-700"
+                        />
+                        <ErrorMessage
+                          name="fullName"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
                       </div>
+                      {/* Email */}
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-pink-600"
+                        >
+                          Email
+                        </label>
+                        <Field
+                          type="email"
+                          name="email"
+                          id="email"
+                          placeholder="Enter your email"
+                          className="mt-1 block w-full px-3 py-2 border border-pink-900 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white text-pink-700"
+                          disabled
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div>
+                      {/* Gender */}
+                      <div>
+                        <label
+                          htmlFor="gender"
+                          className="block text-sm font-medium text-pink-600"
+                        >
+                          Gender
+                        </label>
+                        <Field
+                          as="select"
+                          name="gender"
+                          id="gender"
+                          className="mt-1 block w-full px-3 py-2 border border-pink-900 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white text-pink-700"
+                        >
+                          <option value="" label="Select gender" />
+                          <option value="male" label="Male" />
+                          <option value="female" label="Female" />
+                          <option value="other" label="Other" />
+                        </Field>
+                        <ErrorMessage
+                          name="gender"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div>
+                      {/* Status Messages */}
                       {status.success && (
-                        <div className="mb-4 text-green-500 text-sm">{status.success}</div>
+                        <div className="text-green-500 text-sm">{status.success}</div>
                       )}
                       {status.error && (
-                        <div className="mb-4 text-red-500 text-sm">{status.error}</div>
+                        <div className="text-red-500 text-sm">{status.error}</div>
                       )}
-                      <div className="mt-6 flex items-center justify-between">
+                      {/* Buttons */}
+                      <div className="flex justify-between items-center">
                         <button
                           type="submit"
-                          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                          className="w-full py-2 px-4 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-all duration-200"
                           disabled={isSubmitting}
                         >
                           {isSubmitting ? 'Saving...' : 'Save Changes'}
                         </button>
                         <button
                           type="button"
-                          className="text-sm text-gray-600 dark:text-gray-400 hover:underline"
+                          className="ml-4 text-red-800 underline hover:text-gray-800 dark:hover:text-gray-300"
                           onClick={() => navigate('/Dashboard')}
                         >
                           Cancel

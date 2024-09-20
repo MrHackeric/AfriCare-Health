@@ -1,6 +1,7 @@
+// src/components/AdvisorPage.js
 import React, { useState, useEffect } from 'react';
 
-function AdvisorPage() {
+function AdvisorPage({ imageSize = '50%' }) { // Default size set to 50%
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -27,15 +28,14 @@ function AdvisorPage() {
       "You are a source of strength and love. Keep believing in your incredible journey! 🌟"
     ];
 
-    // Select a random message
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
     setMessage(randomMessage);
-  }, []); // Runs only once when the component is mounted
+  }, []);
 
   return (
-    <div className="col-span-full xl:col-span-12 bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
-      <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Welcome Back!</h1>
-      <p className="text-lg text-gray-700 dark:text-gray-300 mt-4">
+    <div className="col-span-full xl:col-span-12 bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-lg rounded-xl p-8">
+      <h1 className="text-3xl font-bold text-pink-800 text-center mb-4">Welcome Back!</h1>
+      <p className="text-lg text-pink-600 mt-2 text-center italic">
         {message}
       </p>
     </div>

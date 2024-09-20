@@ -8,8 +8,8 @@ function Recommendations() {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6 mt-6">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+    <div className="bg-gradient-to-r from-pink-100 via-purple-100 to-pink-200 shadow-sm rounded-xl p-6 mt-6">
+      <h2 className="text-xl font-semibold text-pink-800 mb-4">
         Personalized Recommendations
       </h2>
       <ul>
@@ -17,7 +17,7 @@ function Recommendations() {
           <li key={index} className="flex items-center mb-4">
             <FaBookMedical className="text-2xl text-indigo-500 mr-4" />
             <div>
-              <a href={rec.link} className="text-lg font-bold text-blue-600 dark:text-blue-400 hover:underline">
+              <a href={rec.link} className="text-lg font-bold text-pink-600 hover:underline">
                 {rec.title}
               </a>
             </div>
