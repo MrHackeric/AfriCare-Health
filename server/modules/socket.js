@@ -4,7 +4,7 @@ import { getFirestore } from "./firestore.js";  // Import the getFirestore funct
 const botName = "Africare Bot";
 
 // Function to handle socket connections
-export function socketConnection(io) {
+const socketConnection = (io) => {
   io.on("connection", (socket) => {
     console.log("A user connected");
 
@@ -65,3 +65,5 @@ export function socketConnection(io) {
     });
   });
 }
+
+export default socketConnection;

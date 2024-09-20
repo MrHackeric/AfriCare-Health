@@ -5,8 +5,6 @@ import { getAuth } from 'firebase/auth';
 
 export const useChatbot = () => {
   const [messages, setMessages] = useState([]);
-  const [starredMessages, setStarredMessages] = useState([]);
-  const [showStarred, setShowStarred] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [caption, setCaption] = useState('');
@@ -95,28 +93,15 @@ export const useChatbot = () => {
     }
   };
 
-  const handleStarMessage = (message) => {
-    const isStarred = starredMessages.some((msg) => msg.id === message.id);
-    if (isStarred) {
-      setStarredMessages((prev) => prev.filter((msg) => msg.id !== message.id));
-    } else {
-      setStarredMessages((prev) => [...prev, message]);
-    }
-  };
-
   return {
     messages,
-    starredMessages,
-    showStarred,
     loading,
     error,
     caption,
-    showAllStarred,
     messagesEndRef,
     chatContainerRef,
     setCaption,
     sendMessage,
-    handleStarMessage,
   };
 };
   
