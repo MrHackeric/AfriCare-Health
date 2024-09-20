@@ -11,22 +11,22 @@ function CallToAction() {
           Empower yourself and access the support you need for a healthier maternal journey.
         </p>
         <div className="flex flex-col md:flex-row justify-center gap-6">
-          <a href="/support-groups">
+          <a href="/SignUp">
             <button className="btn bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-white hover:text-pink-600 transition duration-300 border-2 border-pink-600">
               Join a Support Group
             </button>
           </a>
-          <a href="/chatbot">
+          <a href="/SignUp">
             <button className="btn bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-white hover:text-pink-600 transition duration-300 border-2 border-pink-600">
               Ask the AI Chatbot
             </button>
           </a>
-          <a href="/emergency-assistance">
+          <a href="/SignUp">
             <button className="btn bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-white hover:text-pink-600 transition duration-300 border-2 border-pink-600">
               Find Emergency Assistance
             </button>
           </a>
-          <a href="/mental-health-resources">
+          <a href="/SignUp">
             <button className="btn bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-white hover:text-pink-600 transition duration-300 border-2 border-pink-600">
               Access Mental Health Resources
             </button>
