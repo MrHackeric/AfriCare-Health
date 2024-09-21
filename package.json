@@ -9,7 +9,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build": "echo 'Build command not specified'",
-    "postinstall": "npm install && npm run build"
+    "postinstall": "npm install"
   },
   "keywords": [],
   "author": "",
