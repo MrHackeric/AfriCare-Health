@@ -24,7 +24,7 @@ const getTimestamp = () => {
 // Initialize Socket.io with CORS settings
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Your React app's URL
+    origin: "https://africare-app.netlify.app/", // Your React app's URL
     methods: ["GET", "POST"],
   },
 });
