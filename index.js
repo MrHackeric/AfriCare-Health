@@ -2,7 +2,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { server, app } from "./modules/server.js";
 import { Server } from "socket.io";
-import socketConnection from "../server/modules/socket.js";
+import socketConnection from "./modules/socket.js";
 import dotenv from "dotenv";
 import initFirebase from './modules/firestore.js';
 
