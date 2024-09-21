@@ -9,7 +9,7 @@ export function initFirebase(__dirname) {
   if (!isFirebaseInitialized) {
     const serviceAccountPath = path.join(
       __dirname,
-      "../auth/africare-health-app-firebase-adminsdk-fxdsl-c304604fa8.json"
+      "./auth/africare-health-app-firebase-adminsdk-fxdsl-c304604fa8.json"
     );
     const serviceAccount = JSON.parse(
       fs.readFileSync(serviceAccountPath, "utf8")
