@@ -24,7 +24,7 @@ const getTimestamp = () => {
 // Initialize Socket.io with CORS settings
 const io = new Server(server, {
   cors: {
-    origin: "https://africare-app.netlify.app/", // Your React app's URL
+    origin: "https://africare-app.netlify.app", // Your React app's URL
     methods: ["GET", "POST"],
   },
 });
@@ -38,11 +38,27 @@ server.listen(PORT, () => {
   console.log(`[${getTimestamp()}] Server running on port ${PORT}`);
 });
 
+// Error handling
+server.on('error', (error) => {
+  console.error(`[${getTimestamp()}] Server error: ${error.message}`);
+});
+
 // Example of logging any socket connection with timestamps
 io.on('connection', (socket) => {
   console.log(`[${getTimestamp()}] User connected: ${socket.id}`);
 
   socket.on('disconnect', () => {
     console.log(`[${getTimestamp()}] User disconnected: ${socket.id}`);
+  });
+});
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  io.close(() => {
+    console.log(`[${getTimestamp()}] Socket server closed`);
+    server.close(() => {
+      console.log(`[${getTimestamp()}] HTTP server closed`);
+      process.exit(0);
+    });
   });
 });
