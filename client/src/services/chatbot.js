@@ -63,7 +63,7 @@ export const useChatbot = () => {
     }
 
     try {
-      const response = await fetch('https://africare-backrnd-ghfwd0e4d6aeegcv.southafricanorth-01.azurewebsites.net/chat', {
+      const response = await fetch('https://africare.loca.lt/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

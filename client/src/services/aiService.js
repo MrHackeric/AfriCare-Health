@@ -25,7 +25,7 @@ export const requestAiResponse = async (text, setMessages) => {
   try {
     const userId = fetchUserId(); // Fetch user ID
 
-    const response = await fetch('https://africare-backrnd-ghfwd0e4d6aeegcv.southafricanorth-01.azurewebsites.net/askAi', {
+    const response = await fetch('https://africare.loca.lt/askAi', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
