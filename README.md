@@ -89,7 +89,7 @@ To run the project locally:
 
 2. Install backend Node.js modules:
    ```bash
-   cd project-root
+   cd AfriCare-Health
    npm install
    ```
 
