@@ -31,7 +31,7 @@ Africare aims to provide a holistic solution to these challenges by:
 ### Deployment Links
 - **Frontend**: [Africare App](https://africare-app.netlify.app)
 - **Backend**: [Africare Backend](https://africare.loca.lt) (hosted locally)
-- To access and run the project successfully, open the backend link and enter the password as (105.161.130.75) so that the frontend works perfectly with the backend. This is for development purposes only. Localtunnel does this protection.
+- To access and run the project successfully, open the backend link and enter the password as (196.96.238.142) so that the frontend works perfectly with the backend. This is for development purposes only. Localtunnel does this protection.
 
 ## AfriCare Health Project Repository
 
