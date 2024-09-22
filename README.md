@@ -1,5 +1,7 @@
 # Africare - Enhancing Maternal Healthcare in Africa
 
+<img src="./client/src/images/Screenshot 2024-09-20 102221.png">
+
 ## Introduction
 
 Africare is a comprehensive platform addressing critical challenges in maternal healthcare across Africa. By leveraging AI-driven guidance, community support networks, and accessible resources, Africare aims to improve the quality of care for expectant mothers and healthcare providers.
@@ -28,10 +30,16 @@ Africare aims to provide a holistic solution to these challenges by:
 3. **Accessibility**: Africare utilizes USSD services for areas with limited internet connectivity, ensuring broader reach and accessibility.
 4. **Community Focus**: Africare fosters a supportive community for both midwives and mothers, facilitating continuous learning and emotional support, which is crucial for improving maternal health outcomes.
 
+<img src="./client/src/images/Screenshot 2024-09-20 230301.png">
+
 ### Deployment Links
 - **Frontend**: [Africare App](https://africare-app.netlify.app)
 - **Backend**: [Africare Backend](https://africare.loca.lt) (hosted locally)
 - To access and run the project successfully, open the backend link and enter the password as (196.96.238.142) so that the frontend works perfectly with the backend. This is for development purposes only. Localtunnel does this protection.
+
+<img src="./client/src/images/Screenshot 2024-09-22 154035.png">
+
+<img src="./client/src/images/Screenshot 2024-09-22 154059.png">
 
 ## AfriCare Health Project Repository
 
