@@ -2,86 +2,103 @@
 
 ## Introduction
 
-Africare is a comprehensive platform designed to address the critical challenges faced in maternal healthcare across Africa. By leveraging AI-driven guidance, community support networks, and accessible resources, Africare aims to improve the quality of care for expectant mothers and healthcare providers.
+Africare is a comprehensive platform addressing critical challenges in maternal healthcare across Africa. By leveraging AI-driven guidance, community support networks, and accessible resources, Africare aims to improve the quality of care for expectant mothers and healthcare providers.
 
 ## Problem Statement
 
 Maternal healthcare in Africa faces significant challenges:
 
-1. **Inadequate Healthcare Infrastructure**: Many regions lack adequate healthcare facilities and trained professionals, leading to high maternal and neonatal mortality rates.
-2. **Mental Health Issues**: Prenatal and postnatal depression are prevalent among women, with insufficient mental health support.
-3. **Fragmented Healthcare Services**: Difficulty in accessing comprehensive and coordinated healthcare services.
+1. **Inadequate Healthcare Infrastructure**: Many regions lack sufficient healthcare facilities and trained professionals, resulting in high maternal and neonatal mortality rates.
+2. **Mental Health Issues**: Prenatal and postnatal depression are prevalent among women, with inadequate mental health support.
+3. **Fragmented Healthcare Services**: Accessing comprehensive and coordinated healthcare services is difficult.
 
 ## Proposed Solution
 
 Africare aims to provide a holistic solution to these challenges by:
 
-1. **Community Support Network**: Creating forums and discussion groups for midwives to share experiences and seek advice.
+1. **Community Support Network**: Establishing forums and discussion groups for midwives to share experiences and seek advice.
 2. **Prenatal and Postnatal Support**: Offering resources and support for women dealing with prenatal and postnatal depression, including access to mental health professionals.
-3. **Emergency Assistance Integration**: Using geolocation services to direct users to nearby medical facilities and pharmacies.
+3. **Emergency Assistance Integration**: Utilizing geolocation services to direct users to nearby medical facilities and pharmacies.
 4. **Resource Sharing Platform**: Enabling users to share personal experiences and foster a supportive community.
 
 ## How Africare Solves the Problem
 
 1. **AI Integration**: Africare provides real-time, AI-driven guidance through a chatbot.
-2. **Comprehensive Platform**: Africare combines training, community support, mental health resources, and emergency assistance into one platform, offering a one-stop solution for maternal healthcare.
+2. **Comprehensive Platform**: Africare combines training, community support, mental health resources, and emergency assistance into a single platform, offering a one-stop solution for maternal healthcare.
 3. **Accessibility**: Africare utilizes USSD services for areas with limited internet connectivity, ensuring broader reach and accessibility.
 4. **Community Focus**: Africare fosters a supportive community for both midwives and mothers, facilitating continuous learning and emotional support, which is crucial for improving maternal health outcomes.
 
-# AfriCare Health Project Repository
+### Deployment Links
+- **Frontend**: [Africare App](https://africare-app.netlify.app)
+- **Backend**: [Africare Backend](https://africare.loca.lt) (hosted locally)
 
-## Directory Structure
+## AfriCare Health Project Repository
+
+### Directory Structure
 
 The repository is organized into several directories to separate different aspects of the project. Below is an overview of the directory structure:
 
 ```
 /project-root
 │
-├── /client                    # Frontend code (React + Vite)
-│   ├── /node_modules          # Node.js modules for the frontend
-│   ├── /public                # Public assets like index.html
-│   ├── /src                   # Source code for the React application
-│   ├── package.json           # Frontend-specific dependencies and scripts
-│   ├── vite.config.js         # Vite configuration file
-│   └── ...                    # Other frontend-specific files
+├── /auth                     # Firebase configuration files
 │
-├── /server                    # Backend code (Node.js)
-│   ├── /node_modules          # Node.js modules for the backend
-│   ├── /config                # Configuration files
-│   ├── /controllers           # Controller functions
-│   ├── /models                # Database models
-│   ├── /routes                # API routes
-│   ├── /services              # Business logic and services
-│   ├── package.json           # Backend-specific dependencies and scripts
-│   ├── index.js               # Main entry point for the Node.js server
-│   └── ...                    # Other backend-specific files
+├── /chatbot                  # Chatbot and community server code
 │
-├── .gitignore                 # Git ignore file
-├── README.md                  # Project documentation
+├── /client                   # Frontend code (React + Vite)
+│   ├── /node_modules         # Node.js modules for the frontend
+│   ├── /public               # Public assets like index.html
+│   ├── /src                  # Source code for the React application
+│   ├── package.json          # Frontend-specific dependencies and scripts
+│   ├── vite.config.js        # Vite configuration file
+│   └── ...
+│
+├── /modules                  # Firestore, server, and socket backend middleware code
+│
+├── /node_modules             # Node.js modules for backend and server
+│
+├── /utils                    # Utility functions
+│
+├──index.js                   # Main entry point for the Node.js server
+│
+├── package.json              # Backend-specific dependencies and scripts
+│
+├── .gitignore                # Git ignore file
+├── README.md                 # Project documentation
+│
+└── web.config                # Web server configuration file
 ```
 
-## Explanation of the Directory Structure
+### Explanation of the Directory Structure
 
-- **`src/projectmodules/`**: Contains all the main project modules and authentication components. Each subdirectory represents a different functional area or feature of the application:
+- **/auth**: Contains Firebase configuration files necessary for authentication.
+- **/chatbot**: Holds the code for the chatbot and related community features.
+- **/client**: The frontend application developed using React and Vite.
+- **/modules**: Contains backend middleware code for Firestore and sockets.
+- **/utils**: Utility functions and scripts used across the application.
+- **/node_modules**: Node.js modules required for both frontend and backend.
 
-  - **`Auth/`**: Components related to authentication functionality.
-  - **`chatbot/`**: Components and logic for the chatbot functionality.
-  - **`community/`**: Components related to community features.
-  - **`dashboardmain/`**: Components and modules for the main dashboard view.
-  - **`forgotpass/`**: Components for password recovery.
-  - **`maps/`**: Components and logic for map functionalities.
-  - **`notfound/`**: Components for handling 404 (Not Found) errors.
-  - **`signin/`**: Components related to user sign-in.
-  - **`signout/`**: Components related to user sign-out.
+## Running the Project
 
-- **`src/supportmodules/`**: Contains files used across multiple parts of the application, such as common utilities and configurations.
+To run the project locally:
 
-- **`src/utils/`**: Contains utility functions and helpers used within components in `src/components`.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MrHackeric/AfriCare-Health
+   ```
 
-- **`src/components/`**: Reusable components used by both project modules and support modules, forming the building blocks of the user interface.
+2. Install backend Node.js modules:
+   ```bash
+   cd project-root
+   npm install
+   ```
 
-- **`src/css/`**: Styling files for the web application, defining the look and feel of the application.
+3. Navigate to the client directory and install frontend Node.js modules:
+   ```bash
+   cd client
+   npm install
+   ```
 
-- **`src/images/`**: Image assets used throughout the application, including `.png`, `.svg`, and `.json` files.
+4. Obtain your Firebase SDK JSON file and place it in the `/auth` folder. Additionally, set up environment variables for Firebase, JavaScript Maps API, and Gemini in the root and client folders.
 
-This organization helps maintain a modular codebase, making it easier to manage and develop different aspects of the application while ensuring clear separation of functionality and resources.
+By following these steps, you will set up the Africare project locally.
